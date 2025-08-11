@@ -1,0 +1,36 @@
+#define PERIODIC 
+#define UNEQUALSOFTENINGS 
+#define PMGRID 270
+#define PLACEHIGHRESREGION 2
+#define ENLARGEREGION 1.5
+#define MULTIPLEDOMAINS 4
+#define PEANOHILBERT 
+#define WALLCLOCK 
+#define MYSORT 
+#define DOUBLEPRECISION 
+#define DOUBLEPRECISION_FFTW 
+#define tree_sage_run 
+#define THIS_IS_A_COSANG_RUN 
+#define Extrap 
+#define Mass_Adjust 
+#define Disk_Orientation 
+#define zoomsim 
+#define OVERRIDE_STOP_FOR_SUBOPTIMUM_DOMAINS 
+#define PARTICLE_TAGGING 
+#define TAG_IN_HDF 
+#define FOF 
+#define FOF_PRIMARY_LINK_TYPES 2
+#define FOF_SECONDARY_LINK_TYPES 1+16+32
+#define FOF_GROUP_MIN_LEN 32
+#define SUBFIND 
+#define MAX_NGB_CHECK 2
+#define SUBFIND_SAVE_PARTICLELISTS 
+#define ORDER_SNAPSHOTS_BY_ID 
+#define LINKLENGTH 0.16
+#define NO_GAS_CLOUDS 
+#define NOTEST_FOR_IDUNIQUENESS 
+#define NO_ISEND_IRECV_IN_DOMAIN 
+#define FIX_PATHSCALE_MPI_STATUS_IGNORE_BUG 
+#define OUTPUTACCELERATION 
+#define OUTPUTTIMESTEP 
+#define HAVE_HDF5 

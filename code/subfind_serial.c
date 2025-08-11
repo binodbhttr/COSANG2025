@@ -1261,7 +1261,7 @@ tagged_list=(struct tagged_particle *)mymalloc("tagged_list",tag_limit*sizeof(st
 	//sprintf(Tdataset_name,"tagHalo_Subhalo_");
 	//sprintf(tagdataset_name,"%s",tag_path);
 	//dset_id = H5Dcreate(file_id, DATASETNAME, H5T_NATIVE_INT, filespace,H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-	Tdset_id=H5Dcreate(Tfile_id,Tdataset_name,Tdatatype, Tfilespace, H5P_DEFAULT);//, H5P_DEFAULT, H5P_DEFAULT);
+	Tdset_id=H5Dcreate(Tfile_id,Tdataset_name,Tdatatype, Tfilespace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 	//printf("SF_S1225\n");
 	//H5Sclose(Tfilespace);
 	//Tcount[0]=tag_limit;
@@ -2499,7 +2499,7 @@ tagged_list=(struct tagged_particle *)mymalloc("tagged_list",locCount*sizeof(str
         //sprintf(Tdataset_name,"tagHalo_Subhalo_");
         //sprintf(tagdataset_name,"%s",tag_path);
         //dset_id = H5Dcreate(file_id, DATASETNAME, H5T_NATIVE_INT, filespace,H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-        Tdset_id=H5Dcreate(Tfile_id,Tdataset_name,Tdatatype, Tfilespace, H5P_DEFAULT);//, H5P_DEFAULT, H5P_DEFAULT);
+        Tdset_id=H5Dcreate(Tfile_id,Tdataset_name,Tdatatype, Tfilespace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);// H5P_DEFAULT, H5P_DEFAULT); //remove two H5P_DEFAULT for older version of hdf5
         //printf("SF_S1225\n");
         //H5Sclose(Tfilespace);
         //Tcount[0]=tag_limit;

@@ -80,7 +80,8 @@ FC 	 = mpif90
 
 OPTIMIZE = -O2 -Wall  -g   # optimization and warning flags (default)
 
-MPICHLIB = -lmpich
+# MPICHLIB = -lmpich
+MPICHLIB = 
 
 ifeq (SOFTDOUBLEDOUBLE,$(findstring SOFTDOUBLEDOUBLE,$(CONFIGVARS)))
 CC       =   mpiCC     # default C++ compiler
@@ -105,6 +106,23 @@ endif
 
 
 #----------------------------------------------------------------------------------------------
+ifeq ($(SYSTYPE),"Pleiades")
+CC       =  mpicc -g -O2 #-xW -ipo -Wall #-g means debugging information -02 means optimization level 2
+CXX      =  mpiCC -g -O2 -xW -ipo -Wall 
+OPTIMIZE = -g -O2 -Wall
+GMP_INCL = -I/home6/bbhattar/include #Make changes as needed Download GMP from http://gmplib.org/
+GMP_LIBS = -L/home6/bbhattar/lib
+GSL_INCL = -I/home6/bbhattar/include #Make changes as needed Download GSL from http://www.gnu.org/software/gsl/
+GSL_LIBS = -L/home6/bbhattar/lib
+FFTW_INCL= -I/home6/bbhattar/include
+FFTW_LIBS= -L/home6/bbhattar/lib
+#HDF5INCL =  -DH5Dcreate_vers=2#skiping this as module load hdf5/1.8.18_mpt takes care of this (Tested version 1 and 2 flags)
+HDF5INCL =  #skiping this as module load hdf5/1.8.18_mpt takes care of this
+HDF5LIB  =  -lhdf5 -lz #
+endif
+
+
+
 ifeq ($(SYSTYPE),"Ranger_intel")
 CC       =  mpicc -g -O2 #-xW -ipo -Wall
 CXX      =  mpiCC -g -O2 -xW -ipo -Wall
@@ -485,6 +503,8 @@ FFTW_INCL=
 FFTW_LIBS=
 MPICHLIB =
 endif
+
+
 
 
 ifeq ($(SYSTYPE),"OpteronMPA-Intel")
@@ -1060,10 +1080,11 @@ $(OBJS): $(INCL)  $(CONFIG)  compile_time_info.c
 
 $(FOBJS): $(FINCL)
 
-complile_time_info.c: $(CONFIG)
+compile_time_info.c: $(CONFIG)
 	$(PERL) prepare-config.perl $(CONFIG)
 
 clean:
 	rm -f $(OBJS) $(FOBJS) $(EXEC)
+
 
 

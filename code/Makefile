@@ -110,15 +110,24 @@ ifeq ($(SYSTYPE),"Pleiades")
 CC       =  mpicc -g -O2 #-xW -ipo -Wall #-g means debugging information -02 means optimization level 2
 CXX      =  mpiCC -g -O2 -xW -ipo -Wall 
 OPTIMIZE = -g -O2 -Wall
-GMP_INCL = -I/home6/bbhattar/include #Make changes as needed Download GMP from http://gmplib.org/
-GMP_LIBS = -L/home6/bbhattar/lib
-GSL_INCL = -I/home6/bbhattar/include #Make changes as needed Download GSL from http://www.gnu.org/software/gsl/
-GSL_LIBS = -L/home6/bbhattar/lib
-FFTW_INCL= -I/home6/bbhattar/include
-FFTW_LIBS= -L/home6/bbhattar/lib
+GMP_INCL = -I/home6/bbhattar/include/ #Make changes as needed Download GMP from http://gmplib.org/
+GMP_LIBS = -L/home6/bbhattar/lib/
+GSL_INCL = -I/home6/bbhattar/include/ #Make changes as needed Download GSL from http://www.gnu.org/software/gsl/
+GSL_LIBS = -L/home6/bbhattar/lib/
+FFTW_INCL= -I/home6/bbhattar/include/
+FFTW_LIBS= -L/home6/bbhattar/lib/
 #HDF5INCL =  -DH5Dcreate_vers=2#skiping this as module load hdf5/1.8.18_mpt takes care of this (Tested version 1 and 2 flags)
 HDF5INCL =  #skiping this as module load hdf5/1.8.18_mpt takes care of this
 HDF5LIB  =  -lhdf5 -lz #
+
+# In Config.sh or Makefile
+COOLING_DIR := $(abspath $(CURDIR))/extra/CoolFunctions
+CFLAGS     += -DCOOLING_TABLE_PATH=\"$(COOLING_DIR)\"
+# Also keep your include/lib flags as you already have them
+CFLAGS  += -I$(HOME)/include
+LDFLAGS += -L$(HOME)/lib -Wl,-rpath,$(HOME)/lib
+LIBS    += -lgsl -lgslcblas -lm
+
 endif
 
 

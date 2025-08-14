@@ -59,7 +59,7 @@ void read_cooling_functions(void)
   for(i = 0; i < 8; i++)
   {
     //sprintf(buf, "extra/CoolFunctions/%s", name[i]);
-    snprintf(buf, 500, "extra/CoolFunctions/%s", name[i]);
+    snprintf(buf, 500, "./extra/CoolFunctions/%s", name[i]);
    // printf("Open coolfunctions file\n");
    // printf("file_name refernce on line %d = %p\n", __LINE__, buf);
   //  printf("CoolFunctions = %s i = %d\n", buf, i);

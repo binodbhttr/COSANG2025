@@ -105,13 +105,34 @@ COSANG_IN_CONFIGVARS := $(and \
   $(findstring THIS_IS_A_COSANG_RUN,$(CONFIGVARS)) \
 )
 
-# 2) Decide
+# ===== TAGGING COde detection =====
+# 1) Prefer what config-makefile wrote into gadgetconfig.h (CONFIGVARS)
+#TAG_IN_CONFIGVARS := $(or \
+#  $(findstring TAG_IN_COLLECTIVE,$(CONFIGVARS)), \
+#  $(findstring TAG_IN_HDF,$(CONFIGVARS)), \
+#  $(findstring PARTICLE_TAGGING,$(CONFIGVARS))
+#)
+
+
+TAG_IN_CONFIGVARS := $(strip $(filter TAG_IN_COLLECTIVE TAG_IN_HDF PARTICLE_TAGGING,$(CONFIGVARS)))
+
+
+# 2) Decide COSANG mode based on config-makefile output
 ifeq ($(COSANG_IN_CONFIGVARS),)
   $(info Either COSANG and or tree_sage_run Not detected !!! COSANG_IN_CONFIGVARS = '$(COSANG_IN_CONFIGVARS)')
   COSANG_MODE := 0
 else
   COSANG_MODE := 1
   $(info Confirmed COSANG_MODE = '$(COSANG_IN_CONFIGVARS)' from gadgetconfig.h)
+endif
+
+# 3) Decide TAGGING mode based on config-makefile output
+ifeq ($(TAG_IN_CONFIGVARS),)
+  $(info Particle Tagging Not detected !!! TAG_IN_CONFIGVARS = '$(TAG_IN_CONFIGVARS)')
+  TAGGING_MODE := 0
+else
+  TAGGING_MODE := 1
+  $(info Confirmed TAGGING_MODE = '$(TAG_IN_CONFIGVARS)' from gadgetconfig.h)
 endif
 
 # ===== Pretty banners =====
@@ -1009,7 +1030,12 @@ OPTIONS = $(OPTIMIZE) $(OPT)
 FOPTIONS = $(OPTIMIZE) $(FOPT)
 
 ifeq ($(COSANG_MODE),1)
-EXEC   = P-Gadget3
+# EXEC   = P-Gadget3
+ifeq ($(TAGGING_MODE),1)
+EXEC   = P-Gadget3_cosang_tagged
+else
+EXEC   = P-Gadget3_cosang_untagged
+endif
 $(info #                                          #)
 $(info #                                          #)
 $(info #                                          #)

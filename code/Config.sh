@@ -72,9 +72,9 @@ zoomsim #Y
 #profiler
 OVERRIDE_STOP_FOR_SUBOPTIMUM_DOMAINS #Y
 #disk_test
-#PARTICLE_TAGGING #Y
+#PARTICLE_TAGGING  # Enables particle tagging for stellar halos
 #TAG_IN_HDF # Y
-#TAG_IN_COLLECTIVE
+#TAG_IN_COLLECTIVE #
 #COSANG_V2 #experimental, runs faster skipping id match
 #ACCURATE_COM #use with COSANG_V2
 #---------------------------------------- On the fly FOF groupfinder 

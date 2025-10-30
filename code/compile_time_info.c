@@ -2,6 +2,7 @@
 void output_compile_time_options(void)
 {
 printf(
+"        cosa#!/bin/bash\n"
 "        PERIODIC\n"
 "        UNEQUALSOFTENINGS\n"
 "        PMGRID=270\n"
@@ -13,7 +14,6 @@ printf(
 "        MYSORT\n"
 "        DOUBLEPRECISION\n"
 "        DOUBLEPRECISION_FFTW\n"
-"        tree_sage_run\n"
 "        THIS_IS_A_COSANG_RUN\n"
 "        Extrap\n"
 "        Mass_Adjust\n"

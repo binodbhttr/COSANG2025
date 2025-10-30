@@ -72,7 +72,6 @@ PERL     =  /usr/bin/perl
 RESULT     := $(shell CONFIG=$(CONFIG) PERL=$(PERL) make -f config-makefile)
 CONFIGVARS := $(shell cat gadgetconfig.h)
 
-
 CC       = mpicc        # sets the C-compiler (default)
 CXX       = mpiCC       # sets the C++-compiler (default)
 
@@ -104,7 +103,125 @@ endif
 
 
 
+# ===== COSANG detection =====
+# 1) Prefer what config-makefile wrote into gadgetconfig.h (CONFIGVARS)
+COSANG_IN_CONFIGVARS := $(and \
+  $(findstring tree_sage_run,$(CONFIGVARS)), \
+  $(findstring THIS_IS_A_COSANG_RUN,$(CONFIGVARS)) \
+)
+
+# 2) Decide
+ifeq ($(COSANG_IN_CONFIGVARS),)
+  $(info Either COSANG and or tree_sage_run Not detected !!! COSANG_IN_CONFIGVARS = '$(COSANG_IN_CONFIGVARS)')
+  COSANG_MODE := 0
+else
+  COSANG_MODE := 1
+  $(info Confirmed COSANG_MODE = '$(COSANG_IN_CONFIGVARS)' from gadgetconfig.h)
+endif
+
+# ===== Pretty banners =====
+ifeq ($(COSANG_MODE),1)
+$(info ########################################################################)
+$(info ########################################################################)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #    ██████╗ ██████╗ ███████╗ █████╗ ███╗   ██╗ ██████╗                #)
+$(info #   ██╔════╝██╔═══██╗██╔════╝██╔══██╗████╗  ██║██╔════╝                #)
+$(info #   ██║     ██║   ██║███████╗███████║██╔██╗ ██║██║  ███╗               #)
+$(info #   ██║     ██║   ██║╚════██║██╔══██║██║╚██╗██║██║   ██║               #)
+$(info #   ╚██████╗╚██████╔╝███████║██║  ██║██║ ╚████║╚██████╔╝               #)
+$(info #    ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝                #)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #       PROJECT: COSANG  —  Coupling Semi-Analytic N-body Galaxies     #)
+$(info #                                                                      #)
+$(info #        Current System is:   → $(SYSTYPE)                                #)
+$(info #                                                                      #)
+$(info #       Initializing simulation modules and preparing to compile...    #)
+$(info #                                                                      #)
+$(info #       Press Ctrl+C if this is NOT the intended system!               #)
+$(info #                                                                      #)
+$(info ########################################################################)
+$(info ########################################################################)
+
+else
+$(info ########################################################################)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #    ███╗   ██╗ ██████╗ ███╗   ██╗                                     #)
+$(info #    ████╗  ██║██╔═══██╗████╗  ██║                                     #)
+$(info #    ██╔██╗ ██║██║   ██║██╔██╗ ██║                                     #)
+$(info #    ██║╚██╗██║██║   ██║██║╚██╗██║                                     #)
+$(info #    ██║ ╚████║╚██████╔╝██║ ╚████║                                     #)
+$(info #    ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═══╝                                     #)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #                                                                      #)
+$(info #    ██████╗ ██████╗ ███████╗ █████╗ ███╗   ██╗ ██████╗                #)
+$(info #   ██╔════╝██╔═══██╗██╔════╝██╔══██╗████╗  ██║██╔════╝                #)
+$(info #   ██║     ██║   ██║███████╗███████║██╔██╗ ██║██║  ███╗               #)
+$(info #   ██║     ██║   ██║╚════██║██╔══██║██║╚██╗██║██║   ██║               #)
+$(info #   ╚██████╗╚██████╔╝███████║██║  ██║██║ ╚████║╚██████╔╝               #)
+$(info #    ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝                #)
+$(info #        NOT A COSANG RUN                                                  )
+$(info #       SYSTYPE → $(SYSTYPE)                                               )
+$(info #       CONFIG → $(CONFIG)                                                 )
+$(info #                                                                          )
+$(info ########################################################################)
+endif
+
+
 #----------------------------------------------------------------------------------------------
+ifeq ($(SYSTYPE),"uahpc")
+CC       =  mpicc -g -O2 #-xW -ipo -Wall #-g means debugging information -02 means optimization level 2
+CXX      =  mpiCC -g -O2 -xW -ipo -Wall
+OPTIMIZE = -g -O2 -Wall
+GMP_INCL = -I/home/bbhattarai2/include #Make changes as needed Download GMP from http://gmplib.org/
+GMP_LIBS = -L/home/bbhattarai2/lib
+
+GSL_INCL = -I/share/apps/gsl/gsl-2.7.1/include #Make changes as needed Download GSL from http://www.gnu.org/software/gsl/
+GSL_LIBS = -L/share/apps/gsl/gsl-2.7.1/lib
+
+FFTW_INCL= -I/home/bbhattarai2/include
+FFTW_LIBS= -L/home/bbhattarai2/lib
+#HDF5INCL =  -DH5Dcreate_vers=2#skiping this as module load hdf5/1.8.18_mpt takes care of this (Tested version 1 and 2 flags)
+
+#HDF5INCL =  -I/share/apps/include
+#HDF5LIB  =  -L/share/apps/lib -lhdf5 -lz
+#HDF5INCL =  -DH5Dcreate_vers=1
+HDF5LIB  =  -L/cm/shared/apps/hdf5/1.12.1/lib
+HDF5INCL =  -I/cm/shared/apps/hdf5/1.12.1/include
+
+#HDF5INCL = -I$($HDF5INCLUDE)
+#HDF5LIB  = -L$(HDF5LIB) -lhdf5 -lz
+
+endif
+
+#----------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------
+
+
+ifeq ($(SYSTYPE),"Pleiades")
+CC       =  mpicc -g -O2 #-xW -ipo -Wall #-g means debugging information -02 means optimization level 2
+CXX      =  mpiCC -g -O2 -xW -ipo -Wall
+OPTIMIZE = -g -O2 -Wall
+GMP_INCL = -I/home6/bbhattar/include #Make changes as needed Download GMP from http://gmplib.org/
+GMP_LIBS = -L/home6/bbhattar/lib
+GSL_INCL = -I/home6/bbhattar/include #Make changes as needed Download GSL from http://www.gnu.org/software/gsl/
+GSL_LIBS = -L/home6/bbhattar/lib
+FFTW_INCL= -I/home6/bbhattar/include
+FFTW_LIBS= -L/home6/bbhattar/lib
+#HDF5INCL =  -DH5Dcreate_vers=2#skiping this as module load hdf5/1.8.18_mpt takes care of this (Tested version 1 and 2 flags)
+HDF5INCL =  #skiping this as module load hdf5/1.8.18_mpt takes care of this
+HDF5LIB  =  -lhdf5 -lz #
+endif
+
+
+
 ifeq ($(SYSTYPE),"Ranger_intel")
 CC       =  mpicc -g -O2 #-xW -ipo -Wall
 CXX      =  mpiCC -g -O2 -xW -ipo -Wall

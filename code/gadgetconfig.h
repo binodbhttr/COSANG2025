@@ -1,3 +1,4 @@
+#define cosa#!/bin/bash 
 #define PERIODIC 
 #define UNEQUALSOFTENINGS 
 #define PMGRID 270
@@ -9,7 +10,6 @@
 #define MYSORT 
 #define DOUBLEPRECISION 
 #define DOUBLEPRECISION_FFTW 
-#define tree_sage_run 
 #define THIS_IS_A_COSANG_RUN 
 #define Extrap 
 #define Mass_Adjust 

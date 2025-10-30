@@ -4,6 +4,9 @@
 # system. Don't commit changes to this file unless you add support for
 # a new system.
 
+SYSTYPE="uahpc"
+#SYSTYPE="uahpc_test"
+#SYSTYPE="Pleiades"
 #SYSTYPE="Darwin"
 #SYSTYPE="odyssey"
 #SYSTYPE="OpenSuse"
@@ -25,7 +28,7 @@
 #SYSTYPE="MPA"
 #SYSTYPE="TACC"
 #SYSTYPE="Stampede2"
-SYSTYPE="Anvil"
+#SYSTYPE="Anvil"
 #SYSTYPE="Regatta"
 #SYSTYPE="VIP"
 #SYSTYPE="SARA"

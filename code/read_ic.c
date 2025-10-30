@@ -1420,7 +1420,7 @@ void read_file(char *fname, int readTask, int lastTask)
 	      if(header.npart[type] > 0)
 		{
 		  sprintf(buf, "/PartType%d", type);
-		  hdf5_grp[type] = H5Gopen(hdf5_file, buf);
+		  hdf5_grp[type] = H5Gopen2(hdf5_file, buf, H5P_DEFAULT);
 		}
 	    }
 	}
@@ -1907,7 +1907,7 @@ void read_file(char *fname, int readTask, int lastTask)
 				  if(All.ICFormat == 3 && pc > 0)
 				    {
 				      get_dataset_name(blocknr, buf);
-				      hdf5_dataset = H5Dopen(hdf5_grp[type], buf);
+				      hdf5_dataset = H5Dopen2(hdf5_grp[type], buf, H5P_DEFAULT);
 
 				      dims[0] = header.npart[type];
 				      dims[1] = get_values_per_blockelement(blocknr);
@@ -2413,7 +2413,7 @@ void read_header_attributes_in_hdf5(char *fname)
   int i;
 
   hdf5_file = H5Fopen(fname, H5F_ACC_RDONLY, H5P_DEFAULT);
-  hdf5_headergrp = H5Gopen(hdf5_file, "/Header");
+  hdf5_headergrp = H5Gopen2(hdf5_file, "/Header", H5P_DEFAULT);
 
   hdf5_attribute = H5Aopen_name(hdf5_headergrp, "NumPart_ThisFile");
   H5Aread(hdf5_attribute, H5T_NATIVE_INT, header.npart);

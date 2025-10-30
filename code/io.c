@@ -5971,14 +5971,20 @@ void write_file(char *fname, int writeTask, int lastTask)
 	  sprintf(buf, "%s.hdf5", fname);
 	  hdf5_file = H5Fcreate(buf, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
-	  hdf5_headergrp = H5Gcreate(hdf5_file, "/Header", 0);
+	  //hdf5_headergrp = H5Gcreate(hdf5_file, "/Header", 0);
+    hdf5_headergrp = H5Gcreate2(hdf5_file, "/Header",
+                            H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
 
 	  for(type = 0; type < 6; type++)
 	    {
 	      if(header.npart[type] > 0)
 		{
 		  sprintf(buf, "/PartType%d", type);
-		  hdf5_grp[type] = H5Gcreate(hdf5_file, buf, 0);
+		  //hdf5_grp[type] = H5Gcreate(hdf5_file, buf, 0);
+      hdf5_grp[type] = H5Gcreate2(hdf5_file, buf,
+                            H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
 		}
 	    }
 
@@ -6274,8 +6280,8 @@ void write_file(char *fname, int writeTask, int lastTask)
 
 			    hdf5_dataspace_in_file = H5Screate_simple(rank, dims, NULL);
 			    hdf5_dataset =
-			      H5Dcreate(hdf5_grp[type], buf, hdf5_datatype, hdf5_dataspace_in_file,
-					H5P_DEFAULT);
+			      H5Dcreate2(hdf5_grp[type], buf, hdf5_datatype, hdf5_dataspace_in_file,
+					H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
 			    pcsum = 0;
 			  }
@@ -6661,28 +6667,28 @@ void write_header_attributes_in_hdf5(hid_t handle)
 
   hdf5_dataspace = H5Screate(H5S_SIMPLE);
   H5Sset_extent_simple(hdf5_dataspace, 1, adim, NULL);
-  hdf5_attribute = H5Acreate(handle, "NumPart_ThisFile", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "NumPart_ThisFile", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_UINT, header.npart);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SIMPLE);
   H5Sset_extent_simple(hdf5_dataspace, 1, adim, NULL);
-  hdf5_attribute = H5Acreate(handle, "NumPart_Total", H5T_NATIVE_UINT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "NumPart_Total", H5T_NATIVE_UINT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_UINT, header.npartTotal);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SIMPLE);
   H5Sset_extent_simple(hdf5_dataspace, 1, adim, NULL);
-  hdf5_attribute = H5Acreate(handle, "NumPart_Total_HighWord", H5T_NATIVE_UINT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "NumPart_Total_HighWord", H5T_NATIVE_UINT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_UINT, header.npartTotalHighWord);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SIMPLE);
   H5Sset_extent_simple(hdf5_dataspace, 1, adim, NULL);
-  hdf5_attribute = H5Acreate(handle, "MassTable", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "MassTable", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_DOUBLE, header.mass);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
@@ -6698,85 +6704,85 @@ void write_header_attributes_in_hdf5(hid_t handle)
 
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Time", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Time", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_DOUBLE, &header.time);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Redshift", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Redshift", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_DOUBLE, &header.redshift);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "BoxSize", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "BoxSize", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_DOUBLE, &header.BoxSize);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "NumFilesPerSnapshot", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "NumFilesPerSnapshot", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.num_files);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Omega0", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Omega0", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_DOUBLE, &header.Omega0);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "OmegaLambda", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "OmegaLambda", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_DOUBLE, &header.OmegaLambda);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "HubbleParam", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "HubbleParam", H5T_NATIVE_DOUBLE, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_DOUBLE, &header.HubbleParam);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Flag_Sfr", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Flag_Sfr", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.flag_sfr);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Flag_Cooling", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Flag_Cooling", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.flag_cooling);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Flag_StellarAge", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Flag_StellarAge", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.flag_stellarage);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Flag_Metals", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Flag_Metals", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.flag_metals);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Flag_Feedback", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Flag_Feedback", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.flag_feedback);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Flag_DoublePrecision", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Flag_DoublePrecision", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.flag_doubleprecision);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);
 
   hdf5_dataspace = H5Screate(H5S_SCALAR);
-  hdf5_attribute = H5Acreate(handle, "Flag_IC_Info", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT);
+  hdf5_attribute = H5Acreate2(handle, "Flag_IC_Info", H5T_NATIVE_INT, hdf5_dataspace, H5P_DEFAULT, H5P_DEFAULT);
   H5Awrite(hdf5_attribute, H5T_NATIVE_INT, &header.flag_ic_info);
   H5Aclose(hdf5_attribute);
   H5Sclose(hdf5_dataspace);

@@ -63,7 +63,7 @@ DOUBLEPRECISION_FFTW
 #SOFTDOUBLEDOUBLE          # needs to be set if a C++ software implementation of 128bit double-double precision should be used
 
 #-----------------------------------------CoSANG Options
-#tree_sage_run  #Y                    #run tree codes and SAGE but no feedback.  MUST BE SELECTED WITH THIS_IS_A_COSANG_RUN OPTION!!!!!!!!!!!!!!!!!!!
+tree_sage_run  #Y                    #run tree codes and SAGE but no feedback.  MUST BE SELECTED WITH THIS_IS_A_COSANG_RUN OPTION!!!!!!!!!!!!!!!!!!!
 THIS_IS_A_COSANG_RUN # Y              #Runs CoSANG 
 Extrap #Y
 Mass_Adjust #Y
@@ -72,8 +72,8 @@ zoomsim #Y
 #profiler
 OVERRIDE_STOP_FOR_SUBOPTIMUM_DOMAINS #Y
 #disk_test
-PARTICLE_TAGGING #Y
-TAG_IN_HDF # Y
+#PARTICLE_TAGGING #Y
+#TAG_IN_HDF # Y
 #TAG_IN_COLLECTIVE
 #COSANG_V2 #experimental, runs faster skipping id match
 #ACCURATE_COM #use with COSANG_V2

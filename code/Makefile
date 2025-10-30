@@ -1,9 +1,4 @@
 #-----------------------------------------------------------------
-#
-# You might be looking for the compile-time Makefile options of the code...
-#
-# They have moved to a separate file.
-#
 # To build the code, do the following:
 #
 #  (1) Copy the file "Template-Config.sh"  to  "Config.sh"
@@ -79,7 +74,7 @@ FC 	 = mpif90
 
 OPTIMIZE = -O2 -Wall  -g   # optimization and warning flags (default)
 
-MPICHLIB = -lmpich
+# MPICHLIB = -lmpich
 
 ifeq (SOFTDOUBLEDOUBLE,$(findstring SOFTDOUBLEDOUBLE,$(CONFIGVARS)))
 CC       =   mpiCC     # default C++ compiler
@@ -139,9 +134,9 @@ $(info #       PROJECT: COSANG  —  Coupling Semi-Analytic N-body Galaxies     
 $(info #                                                                      #)
 $(info #        Current System is:   → $(SYSTYPE)                                #)
 $(info #                                                                      #)
-$(info #       Initializing simulation modules and preparing to compile...    #)
+$(info #       Initializing modules and preparing to compile...               #)
 $(info #                                                                      #)
-$(info #       Press Ctrl+C if this is NOT the intended system!               #)
+$(info #       Check makefile.systype if this is NOT the intended system!     #)
 $(info #                                                                      #)
 $(info ########################################################################)
 $(info ########################################################################)
@@ -191,8 +186,10 @@ FFTW_LIBS= -L/home/bbhattarai2/lib
 
 #HDF5INCL =  -I/share/apps/include
 #HDF5LIB  =  -L/share/apps/lib -lhdf5 -lz
-#HDF5INCL =  -DH5Dcreate_vers=1
-HDF5LIB  =  -L/cm/shared/apps/hdf5/1.12.1/lib
+#HDF5INCL =  -DH5Dcreate_vers=2
+HDF5LIB  =  -L/cm/shared/apps/hdf5/1.12.1/lib -lhdf5 -lz
+#HDF5LIB  =  -L/cm/shared/apps/hdf5/1.12.1/lib
+
 HDF5INCL =  -I/cm/shared/apps/hdf5/1.12.1/include
 
 #HDF5INCL = -I$($HDF5INCLUDE)
@@ -1011,7 +1008,32 @@ OPTIONS = $(OPTIMIZE) $(OPT)
 
 FOPTIONS = $(OPTIMIZE) $(FOPT)
 
+ifeq ($(COSANG_MODE),1)
 EXEC   = P-Gadget3
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+$(info Will save COSANG executable as = '$(EXEC)' )
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+
+else
+
+EXEC   = non_CoSANG_Gadget3
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+$(info Will save Non COSANG executable as = '$(EXEC)' )
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+$(info #                                          #)
+
+endif
 
 OBJS  = endrun.o mpi_util.o restart.o subfind_loctree.o additionalSPH.o fof.o  mymalloc.o  run.o  subfind_nearesttwo.o \
  allocate.o ngb.o second_order.o subfind_potential.o allvars.o forcetree_update.o  parallel_sort.o sfr_eff.o subfind_reshuffle.o \
@@ -1182,5 +1204,4 @@ complile_time_info.c: $(CONFIG)
 
 clean:
 	rm -f $(OBJS) $(FOBJS) $(EXEC)
-
 

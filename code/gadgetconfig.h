@@ -10,14 +10,13 @@
 #define MYSORT 
 #define DOUBLEPRECISION 
 #define DOUBLEPRECISION_FFTW 
+#define tree_sage_run 
 #define THIS_IS_A_COSANG_RUN 
 #define Extrap 
 #define Mass_Adjust 
 #define Disk_Orientation 
 #define zoomsim 
 #define OVERRIDE_STOP_FOR_SUBOPTIMUM_DOMAINS 
-#define PARTICLE_TAGGING 
-#define TAG_IN_HDF 
 #define FOF 
 #define FOF_PRIMARY_LINK_TYPES 2
 #define FOF_SECONDARY_LINK_TYPES 1+16+32

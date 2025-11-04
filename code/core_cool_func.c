@@ -10,6 +10,10 @@
 
 #define TABSIZE 91
 
+#ifndef COOLING_TABLE_PATH
+#define COOLING_TABLE_PATH "extra/CoolFunctions"   /* fallback if not defined */
+#endif
+
 
 static char *name[] = {
   "stripped_mzero.cie",
@@ -59,7 +63,13 @@ void read_cooling_functions(void)
   for(i = 0; i < 8; i++)
   {
     //sprintf(buf, "extra/CoolFunctions/%s", name[i]);
-    snprintf(buf, 500, "extra/CoolFunctions/%s", name[i]);
+    //snprintf(buf, 500, "./extra/CoolFunctions/%s", name[i]);
+    const char *cooldir = getenv("COOLING_TABLE_DIR");
+    if(!cooldir || !*cooldir) cooldir = COOLING_TABLE_PATH;
+    snprintf(buf, sizeof(buf), "%s/%s", cooldir, name[i]);
+    printf("This is the cooling table path: %s/%s\n", cooldir, name[i]);
+    snprintf(buf, sizeof(buf), "%s/%s", cooldir, name[i]);
+
    // printf("Open coolfunctions file\n");
    // printf("file_name refernce on line %d = %p\n", __LINE__, buf);
   //  printf("CoolFunctions = %s i = %d\n", buf, i);

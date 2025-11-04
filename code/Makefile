@@ -97,6 +97,15 @@ endif
 endif
 
 
+# New Addition for cooling functions
+COOLING_DIR := $(abspath $(CURDIR))/extra/CoolFunctions
+CFLAGS     += -DCOOLING_TABLE_PATH=\"$(COOLING_DIR)\"
+# Also keep your include/lib flags as you already have them
+CFLAGS  += -I$(HOME)/include
+LDFLAGS += -L$(HOME)/lib -Wl,-rpath,$(HOME)/lib
+LIBS    += -lgsl -lgslcblas -lm
+
+
 
 # ===== COSANG detection =====
 # 1) Prefer what config-makefile wrote into gadgetconfig.h (CONFIGVARS)

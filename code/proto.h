@@ -1047,11 +1047,11 @@ void calc_J_slopes(int newgal, int oldgal);
 void profile_instance_start(struct ProfileInstance *profile_instance, int bucketname, char *func_name, char *file_name, int line_number);
 void profile_instance_end(struct ProfileInstance *profile_instance, int bucketname);
 void write_profile_data();
-void center_of_mass(const hash_t* Ghash, const hash_t* Phash);
+void center_of_mass(const hash_t* Phash);
 void malloc_CM();
 void malloc_CM_iterate();
 void find_missing_particles(const hash_t* Ghash, const hash_t* Phash);
-int cm_iterate(const hash_t* hashtable,const hash_t* Phash, int galid, int itcount);
+int cm_iterate(const hash_t* Phash, int galid, int itcount);
 void find_missing_iterate(const hash_t* Ghash, const hash_t* Phash, float rsmall, int galid); 
 
 

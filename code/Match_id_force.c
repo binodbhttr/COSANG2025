@@ -68,9 +68,7 @@ void Match_ids()
     pcounter = 0;
     kk = 0;
     hash_t* hashtable;
-    hash_t* hash3;
     
-
 #ifdef profiler
     profile_instance_start(&hash_instance, Buckethash, __FUNCTION__, __FILE__, __LINE__);
 #endif
@@ -81,15 +79,6 @@ void Match_ids()
     {
        hash_insert(hashtable, P[b].ID, b);
     }
-
-
-   hash3 = hash_new(counter3);
-
-   for(ii=0; ii<counter3; ii++)
-   {
-     hash_insert(hash3, P_list[ii], G_list[ii]);
-   }
-
 
 #ifdef profiler
    profile_instance_end(&hash_instance, Buckethash);
@@ -102,7 +91,7 @@ void Match_ids()
       AllGal[i].CM_Pos[2] = AllGal[i].Pos[2];
    }
 /////////////////////////////////////////////////////
-   center_of_mass(hash3, hashtable);
+   center_of_mass(hashtable);
    MPI_Barrier(MPI_COMM_WORLD);
 
 
@@ -152,12 +141,12 @@ void Match_ids()
           return;
     }
 	 //test printf
-    //printf("MID1\n");
    for(i=0; i<counter3; i++)
    {
       if((partidx = hash_lookup(hashtable, P_list[i])) != HASH_INVALID)
         {
-           if((gidx = hash_lookup(hash3, P[partidx].ID)) != HASH_INVALID)
+           gidx = G_list[i];
+           if(gidx >= 0 && gidx < NumGalaxies)
            {
              if(AllGal[gidx].sub_len >= 1000)
              {
@@ -179,8 +168,6 @@ void Match_ids()
           countm = countm + 1;
         }
    }
-
-   hash_delete(hash3);
 
 
 #ifdef profiler

@@ -86,24 +86,30 @@ void center_of_mass(const hash_t* Ghash, const hash_t* Phash)
 
     }
 
-    /* Reduce per-galaxy accumulators across tasks and write CM positions */
+    /* Vectorized reduction of per-galaxy accumulators across tasks */
+    double *send_buf = (double *)malloc(NumGalaxies * 4 * sizeof(double));
+    double *recv_buf = (double *)malloc(NumGalaxies * 4 * sizeof(double));
+    if (!send_buf || !recv_buf) {
+        printf("Task %d: Failed to allocate MPI reduction buffers in center_of_mass\n", ThisTask);
+        ABORT(113);
+    }
+
     for (j = 0; j < NumGalaxies; j++) {
-        double send_px = (double)CM_Pxlist[j];
-        double send_py = (double)CM_Pylist[j];
-        double send_pz = (double)CM_Pzlist[j];
-        double send_m  = (double)CM_Mlist[j];
+        send_buf[4 * j + 0] = (double)CM_Pxlist[j];
+        send_buf[4 * j + 1] = (double)CM_Pylist[j];
+        send_buf[4 * j + 2] = (double)CM_Pzlist[j];
+        send_buf[4 * j + 3] = (double)CM_Mlist[j];
+    }
 
-        double pcmx = 0.0, pcmy = 0.0, pcmz = 0.0, cmass = 0.0;
-        MPI_Allreduce(&send_px, &pcmx, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-        MPI_Allreduce(&send_py, &pcmy, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-        MPI_Allreduce(&send_pz, &pcmz, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-        MPI_Allreduce(&send_m,  &cmass,1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    MPI_Allreduce(send_buf, recv_buf, NumGalaxies * 4, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
+    for (j = 0; j < NumGalaxies; j++) {
         if (AllGal[j].sub_len >= 1000) {
+            double cmass = recv_buf[4 * j + 3];
             if (cmass > 0.0) {
-                double cmx = pcmx / cmass;
-                double cmy = pcmy / cmass;
-                double cmz = pcmz / cmass;
+                double cmx = recv_buf[4 * j + 0] / cmass;
+                double cmy = recv_buf[4 * j + 1] / cmass;
+                double cmz = recv_buf[4 * j + 2] / cmass;
 
                 AllGal[j].CM_Pos[0] = isnan(cmx) ? AllGal[j].Pos[0] : (float)cmx;
                 AllGal[j].CM_Pos[1] = isnan(cmy) ? AllGal[j].Pos[1] : (float)cmy;
@@ -114,8 +120,16 @@ void center_of_mass(const hash_t* Ghash, const hash_t* Phash)
                 AllGal[j].CM_Pos[1] = AllGal[j].Pos[1];
                 AllGal[j].CM_Pos[2] = AllGal[j].Pos[2];
             }
+        } else {
+            /* For unresolved halos, fall back to default position */
+            AllGal[j].CM_Pos[0] = AllGal[j].Pos[0];
+            AllGal[j].CM_Pos[1] = AllGal[j].Pos[1];
+            AllGal[j].CM_Pos[2] = AllGal[j].Pos[2];
         }
     }
+
+    free(send_buf);
+    free(recv_buf);
 
     /* Free the lists (not needed beyond initial CM) */
     free(CM_Pxlist); CM_Pxlist = NULL;
@@ -123,20 +137,125 @@ void center_of_mass(const hash_t* Ghash, const hash_t* Phash)
     free(CM_Pzlist); CM_Pzlist = NULL;
     free(CM_Mlist);  CM_Mlist  = NULL;
 
-    /* Shrinking-sphere refinement */
-    for (k = 0; k < NumGalaxies; k++) {
-        if (AllGal[k].sub_len < 1000) continue; /* skip poorly resolved subhalos */
-
-        int itcount = 1;
-        int diff    = 1;
-        do {
-            diff = cm_iterate(Ghash, Phash, k, itcount);
-            int diff2 = 0;
-            MPI_Allreduce(&diff, &diff2, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
-            itcount++;
-            if (diff2 == 0) break;
-        } while (itcount < 3); /* keep the original cap of 3 iters */
+    /* Shrinking-sphere refinement (fully vectorized) */
+    int *active_refine = (int *)malloc(NumGalaxies * sizeof(int));
+    if (!active_refine) {
+        printf("Task %d: Failed to allocate active_refine buffer\n", ThisTask);
+        ABORT(114);
     }
+
+    int any_active = 0;
+    for (k = 0; k < NumGalaxies; k++) {
+        if (AllGal[k].sub_len >= 1000) {
+            active_refine[k] = 1;
+            any_active = 1;
+        } else {
+            active_refine[k] = 0;
+        }
+    }
+
+    if (any_active) {
+        double *iter_px = (double *)malloc(NumGalaxies * sizeof(double));
+        double *iter_py = (double *)malloc(NumGalaxies * sizeof(double));
+        double *iter_pz = (double *)malloc(NumGalaxies * sizeof(double));
+        double *iter_m  = (double *)malloc(NumGalaxies * sizeof(double));
+        double *iter_send = (double *)malloc(NumGalaxies * 4 * sizeof(double));
+        double *iter_recv = (double *)malloc(NumGalaxies * 4 * sizeof(double));
+        int *local_diff = (int *)malloc(NumGalaxies * sizeof(int));
+        int *global_diff = (int *)malloc(NumGalaxies * sizeof(int));
+
+        if (!iter_px || !iter_py || !iter_pz || !iter_m || !iter_send || !iter_recv || !local_diff || !global_diff) {
+            printf("Task %d: Failed to allocate active refinement iteration buffers\n", ThisTask);
+            ABORT(115);
+        }
+
+        int itcount;
+        for (itcount = 1; itcount <= 2; itcount++) {
+            memset(iter_px, 0, NumGalaxies * sizeof(double));
+            memset(iter_py, 0, NumGalaxies * sizeof(double));
+            memset(iter_pz, 0, NumGalaxies * sizeof(double));
+            memset(iter_m,  0, NumGalaxies * sizeof(double));
+
+            for (j = 0; j < counter3; j++) {
+                int partidx = hash_lookup(Phash, P_list[j]);
+                if (partidx == HASH_INVALID) continue;
+
+                int gidx = hash_lookup(Ghash, P[partidx].ID);
+                if (gidx == HASH_INVALID || gidx < 0 || gidx >= NumGalaxies) continue;
+                if (!active_refine[gidx]) continue;
+
+                float rsmall = AllGal[gidx].Rvir;
+                int s;
+                for (s = 0; s < itcount; s++) rsmall *= 0.8f;
+
+                float dx = P[partidx].Pos[0] - AllGal[gidx].CM_Pos[0];
+                float dy = P[partidx].Pos[1] - AllGal[gidx].CM_Pos[1];
+                float dz = P[partidx].Pos[2] - AllGal[gidx].CM_Pos[2];
+                float r2 = dx*dx + dy*dy + dz*dz;
+
+                if (r2 <= rsmall * rsmall) {
+                    iter_px[gidx] += P[partidx].Mass * P[partidx].Pos[0];
+                    iter_py[gidx] += P[partidx].Mass * P[partidx].Pos[1];
+                    iter_pz[gidx] += P[partidx].Mass * P[partidx].Pos[2];
+                    iter_m[gidx]  += P[partidx].Mass;
+                }
+            }
+
+            for (k = 0; k < NumGalaxies; k++) {
+                iter_send[4 * k + 0] = iter_px[k];
+                iter_send[4 * k + 1] = iter_py[k];
+                iter_send[4 * k + 2] = iter_pz[k];
+                iter_send[4 * k + 3] = iter_m[k];
+            }
+
+            MPI_Allreduce(iter_send, iter_recv, NumGalaxies * 4, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+            memset(local_diff, 0, NumGalaxies * sizeof(int));
+            for (k = 0; k < NumGalaxies; k++) {
+                if (active_refine[k]) {
+                    double cmass = iter_recv[4 * k + 3];
+                    if (cmass > 0.0) {
+                        double cmx = iter_recv[4 * k + 0] / cmass;
+                        double cmy = iter_recv[4 * k + 1] / cmass;
+                        double cmz = iter_recv[4 * k + 2] / cmass;
+
+                        double dx = fabs(cmx - AllGal[k].CM_Pos[0]);
+                        double dy = fabs(cmy - AllGal[k].CM_Pos[1]);
+                        double dz = fabs(cmz - AllGal[k].CM_Pos[2]);
+
+                        AllGal[k].CM_Pos[0] = (float)cmx;
+                        AllGal[k].CM_Pos[1] = (float)cmy;
+                        AllGal[k].CM_Pos[2] = (float)cmz;
+
+                        if (dx > 0.01 || dy > 0.01 || dz > 0.01) {
+                            local_diff[k] = 1;
+                        }
+                    }
+                }
+            }
+
+            MPI_Allreduce(local_diff, global_diff, NumGalaxies, MPI_INT, MPI_MAX, MPI_COMM_WORLD);
+
+            int any_still_active = 0;
+            for (k = 0; k < NumGalaxies; k++) {
+                if (active_refine[k]) {
+                    if (global_diff[k] == 0) {
+                        active_refine[k] = 0;
+                    } else {
+                        any_still_active = 1;
+                    }
+                }
+            }
+
+            if (!any_still_active) break;
+        }
+
+        free(iter_px); free(iter_py); free(iter_pz); free(iter_m);
+        free(iter_send); free(iter_recv);
+        free(local_diff); free(global_diff);
+    }
+
+    free(active_refine);
 
     if (ThisTask == 0) {
         printf("Finished CoM calculation\n");

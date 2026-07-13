@@ -822,11 +822,36 @@ void load_subhalo_catalogue_ht(int num)
 	    {
 	      if(descendant_haloindex[sc] >= 0 && descendant_snapnum[sc] >= 0 && descendant_snapnum[sc] <= LastSnapShotNr)
 		{
-		  Halo[nh].Descendant = FirstHaloInSnap[descendant_snapnum[sc]] + descendant_haloindex[sc];
-		  if(Halo[nh].Descendant >= TotHalos || Halo[nh].Descendant < 0)
+		  int desc_idx = FirstHaloInSnap[descendant_snapnum[sc]] + descendant_haloindex[sc];
+		  if(desc_idx >= 0 && desc_idx < TotHalos)
+		    {
+		      /* ============================================================================
+			 [GAP DESCENDANT SAFETY CHECK]
+			 Added on July 12, 2026, 21:30:29-07:00.
+			 
+			 SAGE pre-initializes unpopulated gap halos (subhalos listed in catalogs 
+			 but filtered out of FOF groups) with FirstHaloInFOFgroup = -1. 
+			 If an active halo lists one of these unpopulated gap halos as its descendant, 
+			 we must NOT link them. Doing so would cause SAGE to walk into the gap halo, 
+			 load FirstHaloInFOFgroup = -1, and crash with ABORT(54) in evolve_galaxies().
+			 
+			 We verify that the descendant halo has a valid FirstHaloInFOFgroup index (>= 0). 
+			 If it does not, we set Descendant = -1, treating the progenitor as disrupted/merged, 
+			 which is clean and safe.
+			 ============================================================================ */
+		      if(Halo[desc_idx].FirstHaloInFOFgroup >= 0)
+			{
+			  Halo[nh].Descendant = desc_idx;
+			}
+		      else
+			{
+			  Halo[nh].Descendant = -1;
+			}
+		    }
+		  else
 		    {
 		      printf("Task %d: load_subhalo_catalogue_ht ERROR: nh=%d desc=%d out of bounds [0, %d). num=%d descendant_snapnum=%d descendant_haloindex=%d\n", 
-			     ThisTask, nh, Halo[nh].Descendant, TotHalos, num, descendant_snapnum[sc], descendant_haloindex[sc]);
+			     ThisTask, nh, desc_idx, TotHalos, num, descendant_snapnum[sc], descendant_haloindex[sc]);
 		      fflush(stdout);
 		      Halo[nh].Descendant = -1;
 		    }

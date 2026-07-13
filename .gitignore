@@ -1,0 +1,5 @@
+*.o
+*.a
+P-Gadget3*
+a.out
+new_code_temp_repair

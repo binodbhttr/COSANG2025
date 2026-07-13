@@ -1,0 +1,630 @@
+Added_source_code_list.txt:read_subfind_ids.c
+Added_source_code_list.txt:mpi_subfind_info.c
+allvars.c:struct Subfind_data_tab *subfind_tab;
+allvars.h:   unsigned int sub_len;      //Length of subhalo in single subfind tab file
+allvars.h:   unsigned int sub_grnr;     //Group number that the subhalo is in single subfind tab file
+allvars.h:  /* original position in subfind output */
+allvars.h:}*subfind_tab;
+allvars.h~:   unsigned int sub_len;      //Length of subhalo in single subfind tab file
+allvars.h~:   unsigned int sub_grnr;     //Group number that the subhalo is in single subfind tab file
+allvars.h~:  /* original position in subfind output */
+allvars.h~:}*subfind_tab;
+Binary file allvars.o matches
+basetree.c:	  printf("Tried to read subfind output, can't open file `%s'\n", buf);
+Binary file basetree.o matches
+Config.sh:#KEEP_HSML_AS_GUESS                 # keep using hsml for gas particles in subfind_density
+Config.sh:#WRITE_SUB_IN_SNAP_FORMAT           # Save subfind results in snap format
+Config.sh:#KD_CHOOSE_PSUBFIND_LIMIT           # Increases the limit for the parallel subfind to the maximum possible
+cooling.h:double *set_metallicities_subfind(int, double*, double);
+core_simulation.h:  // original position in subfind output 
+fof.c:#include "subfind.h"
+fof.c:  subfind(num);
+fof.c:  read_subfind_ids();
+fof.c:  subfind(num);
+fof.c:	subfind(num);
+fof.c:  subfind(num);
+Binary file fof.o matches
+forcetree.c:#include "subfind.h"
+forcetree.c:int subfind_force_treeevaluate_potential(int target, int mode, int *nexport, int *nsend_local)
+forcetree.c~:#include "subfind.h"
+forcetree.c~:int subfind_force_treeevaluate_potential(int target, int mode, int *nexport, int *nsend_local)
+Binary file forcetree.o matches
+main.c:          Get_subfind_halo_info();
+main.c:          free(subfind_tab);
+main.c:          subfind_tab = NULL;
+Makefile:OBJS  = endrun.o mpi_util.o restart.o subfind_loctree.o additionalSPH.o fof.o  mymalloc.o  run.o  subfind_nearesttwo.o \
+Makefile: allocate.o ngb.o second_order.o subfind_potential.o allvars.o forcetree_update.o  parallel_sort.o sfr_eff.o subfind_reshuffle.o \
+Makefile: begrun.o  global.o parallel_sort_special.o sfr_mhm.o subfind_serial.o checksummed_sendrecv.o gravtree.o peano.o sizelimited_sendrecv.o subfind_so.o \
+Makefile: compare_partitions.o gravtree_forcetest.o pinning.o subfind.o subfind_vars.o compile_time_info.o hydra.o pm_nonperiodic.o subfind_alternative_collective.o swap.o \
+Makefile: cooling.o init.o pm_periodic.o subfind_collective.o system.o io.o potential.o subfind_cont.o timestep.o \
+Makefile: density.o kicks.o predict.o subfind_density.o twopoint.o domain.o longrange.o read_ic.o subfind_distribute.o utilities.o \
+Makefile: driftfac.o main.o read_ic_cluster.o subfind_findlinkngb.o sage.o core_init.o core_read_parameter_file.o core_io_tree.o \
+Makefile: basetree.o system_bt.o mymalloc_bt.o treecreate.o mymalloc_ht.o peano_ht.o read_subp_single.o read_subp_multiple.o read_subfind_ids.o \
+Makefile: sub_particle_list.o mpi_subfind_info.o create_plists.o Match_id_force.o hash.o disk_orient.o
+Makefile:	   assert.h       dd.h           fof.h           myqsort.h      subfind.h      tags.h         vector.h  \
+mpi_subfind_info.c:void Get_subfind_halo_info()
+mpi_subfind_info.c:           AllGal[i].sub_len = subfind_tab[shalo].sub_len;
+mpi_subfind_info.c:           AllGal[i].sub_grnr = subfind_tab[shalo].sub_grnr;
+mpi_subfind_info.c:           AllGal[i].J[0] = subfind_tab[shalo].sub_spin[0];
+mpi_subfind_info.c:           AllGal[i].J[1] = subfind_tab[shalo].sub_spin[1];
+mpi_subfind_info.c:           AllGal[i].J[2] = subfind_tab[shalo].sub_spin[2];
+mpi_subfind_info.c:           AllGal[i].haloPos[0] = subfind_tab[shalo].group_pos[0];
+mpi_subfind_info.c:           AllGal[i].haloPos[1] = subfind_tab[shalo].group_pos[1];
+mpi_subfind_info.c:           AllGal[i].haloPos[2] = subfind_tab[shalo].group_pos[3];
+mpi_subfind_info.c:         sublen = subfind_tab[shalo].sub_len;
+mpi_subfind_info.c:         subgrnr = subfind_tab[shalo].sub_grnr;
+mpi_subfind_info.c:         grouppos1 = subfind_tab[shalo].group_pos[0];
+mpi_subfind_info.c:         grouppos2 = subfind_tab[shalo].group_pos[1];
+mpi_subfind_info.c:         grouppos3 = subfind_tab[shalo].group_pos[3];
+mpi_subfind_info.c:         jspin1 = subfind_tab[shalo].sub_spin[0];
+mpi_subfind_info.c:         jspin2 = subfind_tab[shalo].sub_spin[1];
+mpi_subfind_info.c:         jspin3 = subfind_tab[shalo].sub_spin[2];
+mpi_subfind_info.c:          AllGal[i].poffset = subfind_tab[AllGal[i].sub_grnr].group_offset;
+mpi_subfind_info.c:          AllGal[i].group_len = subfind_tab[AllGal[i].sub_grnr].group_len;
+mpi_subfind_info.c:       offset = subfind_tab[grpcounter].group_offset;
+mpi_subfind_info.c:       grouplen = subfind_tab[grpcounter].group_len;
+Binary file mpi_subfind_info.o matches
+Binary file P-Gadget3 matches
+proto.h:double INLINE_FUNC get_metallicity_subfind   (int);
+proto.h:double             get_starformation_rate_subfind(int i, float *Temperature, float *xclouds);
+proto.h:int                get_SF_index_subfind      (int, int*, int*);
+proto.h:void read_subfind(int subfnr);
+proto.h:void read_subfind_multiple_files();
+proto.h:void Get_subfind_halo_info();
+read_ic.c:#include "subfind.h"
+read_ic.c:  subfind_reshuffle_free();
+README_Cosang_v7:Files have been added to read the subfind files and find the particles belonging to the halos with galaxies.
+README_Cosang_v7:  -This calls the functions to read the subfind files and link up the particles 
+Binary file read_subfind_ids.o matches
+read_subp_multiple.c:   read_subfind_multiple_files();
+read_subp_multiple.c:          perror("Failed to allocate for subfind header...");
+read_subp_multiple.c:          perror("Failed to allocate for subfind...");
+read_subp_multiple.c:void read_subfind_multiple_files()
+read_subp_multiple.c:       //struct subfind subf[nsubs + ngroups];
+Binary file read_subp_multiple.o matches
+read_subp_single.c:    read_subfind(subfile);
+read_subp_single.c:    //AllGal[galindex].sub_len = subfind_tab[shalo].sub_len;
+read_subp_single.c:    //AllGal[galindex].sub_grnr = subfind_tab[shalo].sub_grnr;
+read_subp_single.c:    //AllGal[galindex].poffset = subfind_tab[shalo].group_offset;
+read_subp_single.c:    //AllGal[galindex].group_len = subfind_tab[shalo].group_len;
+read_subp_single.c:   // free(subfind_tab);
+read_subp_single.c:          perror("Failed to allocate for subfind header...");
+read_subp_single.c:    if((subfind_tab = (struct Subfind_data_tab*)malloc((tots+1) * sizeof(struct Subfind_data_tab))) == NULL)
+read_subp_single.c:          perror("Failed to allocate for subfind...");
+read_subp_single.c:void read_subfind(int subfnr)
+read_subp_single.c:       fread(&subfind_tab[i].group_len, sizeof(unsigned int), 1, sf);
+read_subp_single.c://         printf("PROC 0 reading file : i = %d, group_len = %d\n", i, subfind_tab[i].group_len);
+read_subp_single.c:       fread(&subfind_tab[i].group_offset, sizeof(unsigned int), 1,sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_mass, sizeof(float), 1,sf);
+read_subp_single.c:              fread(&subfind_tab[i].group_pos[a], sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_m_mean200, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_r_mean200, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_m_crit200, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_r_crit200, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_m_tophat200, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_r_tophat200, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_contamination_count, sizeof(unsigned int), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_contamination_mass, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_nsubs, sizeof(unsigned int), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].group_firstsub, sizeof(unsigned int), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_len, sizeof(unsigned int), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_offset, sizeof(unsigned int), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_parent, sizeof(unsigned int), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_mass, sizeof(float), 1, sf);
+read_subp_single.c:           fread(&subfind_tab[i].sub_pos[a], sizeof(float), 1, sf);
+read_subp_single.c:           fread(&subfind_tab[i].sub_vel[a], sizeof(float), 1, sf);
+read_subp_single.c:           fread(&subfind_tab[i].sub_cm[a], sizeof(float), 1, sf);
+read_subp_single.c:           fread(&subfind_tab[i].sub_spin[a], sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_veldisp, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_vmax, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_vmaxrad, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_halfmassrad, sizeof(float), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_id_mostbound, sizeof(unsigned int), 1, sf);
+read_subp_single.c:       fread(&subfind_tab[i].sub_grnr, sizeof(unsigned int), 1, sf);
+Binary file read_subp_single.o matches
+run.c:                 single_subf_read(j);  //Each processor reads in 1 subfind_tab file
+run.c:            printf("Get halo info from subfind\n");
+run.c:          Get_subfind_halo_info(); 
+run.c:          assert(subfind_tab != NULL);
+run.c:          free(subfind_tab);  
+run.c:          subfind_tab = NULL;
+run.c:            printf("Read subfind ids\n");
+run.c:                 read_subf_ids();  //Each processor reads in 1 subfind_id file
+run.c:	      "fof/subfind   %10.2f  %5.1f%%\n" "smoothing     %10.2f  %5.1f%%\n"
+Binary file run.o matches
+subfind_alternative_collective.c:#include "subfind.h"
+subfind_alternative_collective.c:int subfind_mark_independent_ones(void);
+subfind_alternative_collective.c:void subfind_process_group_collectively(int num)
+subfind_alternative_collective.c:    printf("\ncollectively doing halo %d (alternative subfind_collective)\n", GrNr);
+subfind_alternative_collective.c:  qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNrGrNr);
+subfind_alternative_collective.c:  subfind_loctree_copyExtent();	/* this will make sure that all the serial trees start from the same root node geometry */
+subfind_alternative_collective.c:  subfind_find_linkngb();
+subfind_alternative_collective.c:  subfind_find_nearesttwo();
+subfind_alternative_collective.c:  parallel_sort(sd, NumPartGroup, sizeof(struct sort_density_data), subfind_compare_densities);
+subfind_alternative_collective.c:      subfind_col_find_candidates(TotalGroupLen);
+subfind_alternative_collective.c:	  qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_rank);
+subfind_alternative_collective.c:	  qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_subnr);
+subfind_alternative_collective.c:	  nsubs = subfind_mark_independent_ones();
+subfind_alternative_collective.c:      subfind_distribute_particles(1);	/* assemble the particles on individual processors */
+subfind_alternative_collective.c:      qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_submark);	/* groups particles of the same canidate together */
+subfind_alternative_collective.c:      subfind_unbind_independent_ones(loc_count_cand);
+subfind_alternative_collective.c:      subfind_distribute_particles(2);	/* bring them back to their original processor */
+subfind_alternative_collective.c:      qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNrGrNr);
+subfind_alternative_collective.c:		      subfind_distlinklist_add_particle(p);
+subfind_alternative_collective.c:		      p = subfind_distlinklist_get_next(p);
+subfind_alternative_collective.c:		  LocalLen = subfind_col_unbind(ud, LocalLen, &LocalNonGasLen);
+subfind_alternative_collective.c:	      LocalLen = subfind_col_unbind(ud, LocalLen, &LocalNonGasLen);
+subfind_alternative_collective.c:      qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_boundlength);
+subfind_alternative_collective.c:      qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_rank);
+subfind_alternative_collective.c:      qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_subnr);
+subfind_alternative_collective.c:		      subfind_distlinklist_add_bound_particles(p, nsubs);
+subfind_alternative_collective.c:		      p = subfind_distlinklist_get_next(p);
+subfind_alternative_collective.c:		  subfind_col_determine_sub_halo_properties(ud, LocalLen, &SubMass,
+subfind_alternative_collective.c:		  subfind_col_determine_sub_halo_properties(ud, LocalLen, &SubMass,
+subfind_alternative_collective.c:	      subfind_col_determine_sub_halo_properties(ud, LocalLen, &SubMass,
+subfind_alternative_collective.c:	      subfind_col_determine_sub_halo_properties(ud, LocalLen, &SubMass,
+subfind_alternative_collective.c:  qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_origindex);	/* reorder them such that the gas particles match again */
+subfind_alternative_collective.c:void subfind_unbind_independent_ones(int count_cand)
+subfind_alternative_collective.c:  /*subfind_loctree_treeallocate(All.TreeAllocFactor * NumPart, NumPart); */
+subfind_alternative_collective.c:  qsort(loc_candidates, count_cand, sizeof(struct cand_dat), subfind_compare_candidates_nsubs);
+subfind_alternative_collective.c:	    len = subfind_unbind(ud, len, &len_non_gas);
+subfind_alternative_collective.c:int subfind_mark_independent_ones(void)
+subfind_alternative_collective.c:		  subfind_distlinklist_mark_particle(p, task, nsubs);
+subfind_alternative_collective.c:		  p = subfind_distlinklist_get_next(p);
+subfind_alternative_collective.c:int subfind_col_unbind(struct unbind_data *d, int num, int *num_non_gas)
+subfind_alternative_collective.c:      subfind_potential_compute(num, d, phaseflag, weakly_bound_limit);
+subfind_alternative_collective.c:      parallel_sort(bnd_energy, num, sizeof(double), subfind_compare_binding_energy);
+subfind_alternative_collective.c:void subfind_distlinklist_add_particle(long long index)
+subfind_alternative_collective.c:void subfind_distlinklist_mark_particle(long long index, int target, int mark)
+subfind_alternative_collective.c:void subfind_distlinklist_add_bound_particles(long long index, int nsub)
+subfind_alternative_collective.c:void subfind_col_find_candidates(int totgrouplen)
+subfind_alternative_collective.c:	      subfind_distlinklist_set_all(sd[off].index, sd[off].index, sd[off].index, 1, -1);
+subfind_alternative_collective.c:	      head = subfind_distlinklist_get_head(ngb_index1);
+subfind_alternative_collective.c:	      retcode = subfind_distlinklist_get_tail_set_tail_increaselen(head, &tail, sd[off].index);
+subfind_alternative_collective.c:		subfind_distlinklist_set_headandnext(sd[off].index, head, -1);
+subfind_alternative_collective.c:		subfind_distlinklist_set_next(tail, sd[off].index);
+subfind_alternative_collective.c:		  subfind_distlinklist_get_two_heads(ngb_index1, ngb_index2, &head, &head_attach);
+subfind_alternative_collective.c:		  head = subfind_distlinklist_get_head(ngb_index1);
+subfind_alternative_collective.c:		  head_attach = subfind_distlinklist_get_head(ngb_index2);
+subfind_alternative_collective.c:		  subfind_distlinklist_get_tailandlen(head, &tail, &len);
+subfind_alternative_collective.c:		  subfind_distlinklist_get_tailandlen(head_attach, &tail_attach, &len_attach);
+subfind_alternative_collective.c:		  subfind_distlinklist_set_tailandlen(head, tail_attach, len + len_attach);
+subfind_alternative_collective.c:		  subfind_distlinklist_set_next(tail, head_attach);
+subfind_alternative_collective.c:		      ss = subfind_distlinklist_set_head_get_next(ss, head);
+subfind_alternative_collective.c:	      retcode = subfind_distlinklist_get_tail_set_tail_increaselen(head, &tail, sd[off].index);
+subfind_alternative_collective.c:		subfind_distlinklist_set_headandnext(sd[off].index, head, -1);
+subfind_alternative_collective.c:		subfind_distlinklist_set_next(tail, sd[off].index);
+subfind_alternative_collective.c:	      subfind_distlinklist_get_tailandlen(Head[task][i], &tail, &len);
+subfind_alternative_collective.c:	      next = subfind_distlinklist_get_next(tail);
+subfind_alternative_collective.c:		    subfind_distlinklist_set_next(prev, index);
+subfind_alternative_collective.c:      p = subfind_distlinklist_setrank_and_get_next(p, &rank);
+subfind_alternative_collective.c:	candidates[task][k].rank = subfind_distlinklist_get_rank(candidates[task][k].head);
+subfind_alternative_collective.c:long long subfind_distlinklist_setrank_and_get_next(long long index, long long *rank)
+subfind_alternative_collective.c:long long subfind_distlinklist_set_head_get_next(long long index, long long head)
+subfind_alternative_collective.c:void subfind_distlinklist_set_next(long long index, long long next)
+subfind_alternative_collective.c:long long subfind_distlinklist_get_next(long long index)
+subfind_alternative_collective.c:long long subfind_distlinklist_get_rank(long long index)
+subfind_alternative_collective.c:long long subfind_distlinklist_get_head(long long index)
+subfind_alternative_collective.c:void subfind_distlinklist_get_two_heads(long long ngb_index1, long long ngb_index2,
+subfind_alternative_collective.c:void subfind_distlinklist_set_headandnext(long long index, long long head, long long next)
+subfind_alternative_collective.c:int subfind_distlinklist_get_tail_set_tail_increaselen(long long index, long long *tail, long long newtail)
+subfind_alternative_collective.c:void subfind_distlinklist_set_tailandlen(long long index, long long tail, int len)
+subfind_alternative_collective.c:void subfind_distlinklist_get_tailandlen(long long index, long long *tail, int *len)
+subfind_alternative_collective.c:void subfind_distlinklist_set_all(long long index, long long head, long long tail, int len, long long next)
+subfind_alternative_collective.c:int subfind_compare_P_GrNrGrNr(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_P_submark(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_candidates_subnr(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_candidates_nsubs(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_candidates_boundlength(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_candidates_rank(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_dist_rotcurve(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_binding_energy(const void *a, const void *b)
+subfind_alternative_collective.c:int subfind_compare_densities(const void *a, const void *b)	/* largest density first */
+Binary file subfind_alternative_collective.o matches
+subfind.c:#include "subfind.h"
+subfind.c:static struct subfind_id_list
+subfind.c:void subfind(int num)
+subfind.c:	  subfind_setup_smoothinglengths(j);
+subfind.c:	  subfind_density(j);
+subfind.c:		      subfind_density(-(i + 1));
+subfind.c:  subfind_setup_smoothinglengths();
+subfind.c:  subfind_density();
+subfind.c:      subfind_save_densities(num);
+subfind.c:  subfind_exchange();		/* distributes gas particles as well if needed */
+subfind.c:    printf("subfind_exchange()() took %g sec\n", timediff(t0, t1));
+subfind.c:  subfind_distribute_groups();
+subfind.c:  /* we begin by applying the collective version of subfind to distributed groups */
+subfind.c:    subfind_process_group_collectively(num);
+subfind.c:  omp_qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNr_DM_Density);
+subfind.c:  qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNr_DM_Density);
+subfind.c:    printf("contructing tree for serial subfind of local groups\n");
+subfind.c:  subfind_loctree_treeallocate((int) (All.TreeAllocFactor * All.MaxPart) + NTopnodes, All.MaxPart);
+subfind.c:    printf("Start to do local groups with serial subfind algorithm\n");
+subfind.c:  /* we now apply a serial version of subfind to the local groups */
+subfind.c:	    offset = subfind_process_group_serial(gr, offset);
+subfind.c:  subfind_loctree_treefree();
+subfind.c:  omp_qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_origindex);
+subfind.c:  qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_origindex);
+subfind.c:  subfind_exchange();		/* distributes gas particles as well if needed */
+subfind.c:    printf("subfind_exchange() (for return to original CPU)  took %g sec\n", timediff(t0, t1));
+subfind.c:  subfind_overdensity();
+subfind.c:  subfind_contamination();
+subfind.c:  subfind_save_final(num);
+subfind.c:void subfind_save_final(int num)
+subfind.c:  omp_qsort(SubGroup, Nsubgroups, sizeof(struct subgroup_properties), subfind_compare_SubGroup_GrNr_SubNr);
+subfind.c:  qsort(SubGroup, Nsubgroups, sizeof(struct subgroup_properties), subfind_compare_SubGroup_GrNr_SubNr);
+subfind.c:		subfind_compare_SubGroup_GrNr_SubNr);
+subfind.c:    (struct subfind_id_list *) mymalloc("ID_list",
+subfind.c:					sizeof(struct subfind_id_list) * (int) (All.MaxPart * 1.5));
+subfind.c:  omp_qsort(ID_list, Nids, sizeof(struct subfind_id_list), subfind_compare_ID_list);
+subfind.c:  qsort(ID_list, Nids, sizeof(struct subfind_id_list), subfind_compare_ID_list);
+subfind.c:  parallel_sort(ID_list, Nids, sizeof(struct subfind_id_list), subfind_compare_ID_list);
+subfind.c:	subfind_save_local_catalogue(num);
+subfind.c:void subfind_save_local_catalogue(int num)
+subfind.c:  struct subfind_id_list *send_IDs;
+subfind.c:  send_IDs = (struct subfind_id_list *) mymalloc("send_IDs", nexport * sizeof(struct subfind_id_list));
+subfind.c:			   Send_count[recvTask] * sizeof(struct subfind_id_list), MPI_BYTE,
+subfind.c:			   Recv_count[recvTask] * sizeof(struct subfind_id_list), MPI_BYTE,
+subfind.c:int subfind_compare_ID_list(const void *a, const void *b)
+subfind.c:  if(((struct subfind_id_list *) a)->GrNr < ((struct subfind_id_list *) b)->GrNr)
+subfind.c:  if(((struct subfind_id_list *) a)->GrNr > ((struct subfind_id_list *) b)->GrNr)
+subfind.c:  if(((struct subfind_id_list *) a)->SubNr < ((struct subfind_id_list *) b)->SubNr)
+subfind.c:  if(((struct subfind_id_list *) a)->SubNr > ((struct subfind_id_list *) b)->SubNr)
+subfind.c:  if(((struct subfind_id_list *) a)->BindingEgy < ((struct subfind_id_list *) b)->BindingEgy)
+subfind.c:  if(((struct subfind_id_list *) a)->BindingEgy > ((struct subfind_id_list *) b)->BindingEgy)
+subfind.c:int subfind_compare_SubGroup_GrNr_SubNr(const void *a, const void *b)
+subfind.c:int subfind_compare_P_GrNr_DM_Density(const void *a, const void *b)
+subfind.c:int subfind_compare_P_origindex(const void *a, const void *b)
+subfind_collective.c:#include "subfind.h"
+subfind_collective.c:void subfind_unbind_independent_ones(int count_cand)
+subfind_collective.c:  /*subfind_loctree_treeallocate(All.TreeAllocFactor * NumPart, NumPart); */
+subfind_collective.c:  omp_qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_candidates_nsubs);
+subfind_collective.c:  qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_candidates_nsubs);
+subfind_collective.c:	    len = subfind_unbind(ud, len, &len_non_gas);
+subfind_collective.c:void subfind_process_group_collectively(int num)
+subfind_collective.c:  omp_qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNrGrNr);
+subfind_collective.c:  qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNrGrNr);
+subfind_collective.c:  subfind_loctree_copyExtent();	/* this will make sure that all the serial trees start from the same root node geometry */
+subfind_collective.c:  subfind_find_linkngb();
+subfind_collective.c:  subfind_find_nearesttwo();
+subfind_collective.c:  parallel_sort(sd, NumPartGroup, sizeof(struct sort_density_data), subfind_compare_densities);
+subfind_collective.c:  subfind_col_save_candidates_task(totgrouplen1, num);
+subfind_collective.c:  omp_qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_origindex);	/* reorder them such that the gas particles match again */
+subfind_collective.c:  qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_origindex);	/* reorder them such that the gas particles match again */
+subfind_collective.c:  subfind_col_load_candidates(num);
+subfind_collective.c:  subfind_col_find_candidates(totgrouplen1);
+subfind_collective.c:	  omp_qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_rank);
+subfind_collective.c:	  qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_rank);
+subfind_collective.c:	  omp_qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_subnr);
+subfind_collective.c:	  qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_subnr);
+subfind_collective.c:		    subfind_poll_for_requests();
+subfind_collective.c:			  subfind_distlinklist_mark_particle(p, master, nsubs);
+subfind_collective.c:			  p = subfind_distlinklist_get_next(p);
+subfind_collective.c:      subfind_distribute_particles(1);	/* assemble the particles on individual processors */
+subfind_collective.c:      omp_qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_submark);	/* groups particles of the same canidate together */
+subfind_collective.c:      qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_submark);	/* groups particles of the same canidate together */
+subfind_collective.c:      subfind_unbind_independent_ones(count_cand);
+subfind_collective.c:      subfind_distribute_particles(2);	/* bring them back to their original processor */
+subfind_collective.c:      omp_qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNrGrNr);
+subfind_collective.c:      qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_GrNrGrNr);
+subfind_collective.c:		subfind_poll_for_requests();
+subfind_collective.c:		      subfind_distlinklist_add_particle(p);
+subfind_collective.c:		      p = subfind_distlinklist_get_next(p);
+subfind_collective.c:	      LocalLen = subfind_col_unbind(ud, LocalLen, &LocalNonGasLen);
+subfind_collective.c:  parallel_sort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_candidates_boundlength);
+subfind_collective.c:      omp_qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_rank);
+subfind_collective.c:      qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_rank);
+subfind_collective.c:      omp_qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_subnr);
+subfind_collective.c:      qsort(tmp_candidates, totcand, sizeof(struct cand_dat), subfind_compare_candidates_subnr);
+subfind_collective.c:		subfind_poll_for_requests();
+subfind_collective.c:		      subfind_distlinklist_add_bound_particles(p, nsubs);
+subfind_collective.c:		      p = subfind_distlinklist_get_next(p);
+subfind_collective.c:	      subfind_col_determine_sub_halo_properties(ud, LocalLen, &SubMass,
+subfind_collective.c:	      subfind_col_determine_sub_halo_properties(ud, LocalLen, &SubMass,
+subfind_collective.c:  omp_qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_origindex);	/* reorder them such that the gas particles match again */
+subfind_collective.c:  qsort(P, NumPart, sizeof(struct particle_data), subfind_compare_P_origindex);	/* reorder them such that the gas particles match again */
+subfind_collective.c:void subfind_col_save_candidates_task(int totgrouplen, int num)
+subfind_collective.c:void subfind_col_load_candidates(int num)
+subfind_collective.c:void subfind_col_find_candidates(int totgrouplen)
+subfind_collective.c:	subfind_poll_for_requests();
+subfind_collective.c:		  subfind_distlinklist_set_all(sd[k].index, sd[k].index, sd[k].index, 1, -1);
+subfind_collective.c:		  head = subfind_distlinklist_get_head(ngb_index1);
+subfind_collective.c:		  retcode = subfind_distlinklist_get_tail_set_tail_increaselen(head, &tail, sd[k].index);
+subfind_collective.c:		    subfind_distlinklist_set_headandnext(sd[k].index, head, -1);
+subfind_collective.c:		    subfind_distlinklist_set_next(tail, sd[k].index);
+subfind_collective.c:		      subfind_distlinklist_get_two_heads(ngb_index1, ngb_index2, &head, &head_attach);
+subfind_collective.c:		      head = subfind_distlinklist_get_head(ngb_index1);
+subfind_collective.c:		      head_attach = subfind_distlinklist_get_head(ngb_index2);
+subfind_collective.c:		      subfind_distlinklist_get_tailandlen(head, &tail, &len);
+subfind_collective.c:		      subfind_distlinklist_get_tailandlen(head_attach, &tail_attach, &len_attach);
+subfind_collective.c:		      subfind_distlinklist_set_tailandlen(head, tail_attach, len + len_attach);
+subfind_collective.c:		      subfind_distlinklist_set_next(tail, head_attach);
+subfind_collective.c:			  ss = subfind_distlinklist_set_head_get_next(ss, head);
+subfind_collective.c:		  retcode = subfind_distlinklist_get_tail_set_tail_increaselen(head, &tail, sd[k].index);
+subfind_collective.c:		    subfind_distlinklist_set_headandnext(sd[k].index, head, -1);
+subfind_collective.c:		    subfind_distlinklist_set_next(tail, sd[k].index);
+subfind_collective.c:	subfind_poll_for_requests();
+subfind_collective.c:		  subfind_distlinklist_get_tailandlen(Head[i], &tail, &len);
+subfind_collective.c:		  next = subfind_distlinklist_get_next(tail);
+subfind_collective.c:			subfind_distlinklist_set_next(prev, index);
+subfind_collective.c:    subfind_poll_for_requests();
+subfind_collective.c:	  p = subfind_distlinklist_setrank_and_get_next(p, &rank);
+subfind_collective.c:	subfind_poll_for_requests();
+subfind_collective.c:	    candidates[k].rank = subfind_distlinklist_get_rank(candidates[k].head);
+subfind_collective.c:int subfind_col_unbind(struct unbind_data *d, int num, int *num_non_gas)
+subfind_collective.c:      subfind_potential_compute(num, d, phaseflag, weakly_bound_limit);
+subfind_collective.c:      parallel_sort(bnd_energy, num, sizeof(double), subfind_compare_binding_energy);
+subfind_collective.c:void subfind_poll_for_requests(void)
+subfind_collective.c:long long subfind_distlinklist_setrank_and_get_next(long long index, long long *rank)
+subfind_collective.c:long long subfind_distlinklist_set_head_get_next(long long index, long long head)
+subfind_collective.c:void subfind_distlinklist_set_next(long long index, long long next)
+subfind_collective.c:void subfind_distlinklist_add_particle(long long index)
+subfind_collective.c:void subfind_distlinklist_mark_particle(long long index, int target, int submark)
+subfind_collective.c:void subfind_distlinklist_add_bound_particles(long long index, int nsub)
+subfind_collective.c:long long subfind_distlinklist_get_next(long long index)
+subfind_collective.c:long long subfind_distlinklist_get_rank(long long index)
+subfind_collective.c:long long subfind_distlinklist_get_head(long long index)
+subfind_collective.c:void subfind_distlinklist_get_two_heads(long long ngb_index1, long long ngb_index2,
+subfind_collective.c:void subfind_distlinklist_set_headandnext(long long index, long long head, long long next)
+subfind_collective.c:int subfind_distlinklist_get_tail_set_tail_increaselen(long long index, long long *tail, long long newtail)
+subfind_collective.c:void subfind_distlinklist_set_tailandlen(long long index, long long tail, int len)
+subfind_collective.c:void subfind_distlinklist_get_tailandlen(long long index, long long *tail, int *len)
+subfind_collective.c:void subfind_distlinklist_set_all(long long index, long long head, long long tail, int len, long long next)
+subfind_collective.c:int subfind_compare_P_GrNrGrNr(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_P_submark(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_candidates_subnr(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_candidates_nsubs(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_candidates_boundlength(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_candidates_rank(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_dist_rotcurve(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_binding_energy(const void *a, const void *b)
+subfind_collective.c:int subfind_compare_densities(const void *a, const void *b)	/* largest density first */
+Binary file subfind_collective.o matches
+subfind_cont.c:#include "subfind.h"
+subfind_cont.c:void subfind_contamination(void)
+subfind_cont.c:	      if(subfind_contamination_evaluate(i, 0, &nexport, Send_count) < 0)
+subfind_cont.c:	subfind_contamination_evaluate(j, 1, &dummy, &dummy);
+subfind_cont.c:int subfind_contamination_evaluate(int target, int mode, int *nexport, int *nsend_local)
+subfind_cont.c:	    subfind_contamination_treefind(pos, h, target, &startnode, mode, nexport, nsend_local, &mass);
+subfind_cont.c:int subfind_contamination_treefind(MyDouble searchcenter[3], MyFloat hsml, int target, int *startnode,
+Binary file subfind_cont.o matches
+subfind_density.c:#include "subfind.h"
+subfind_density.c:void subfind_density(int j_in)
+subfind_density.c:void subfind_density(void)
+subfind_density.c:		    if(subfind_density_evaluate(i, 0, &nexport, Send_count, j_in) < 0)
+subfind_density.c:		    if(subfind_density_evaluate(i, 0, &nexport, Send_count) < 0)
+subfind_density.c:	    subfind_density_evaluate(j, 1, &dummy, &dummy, j_in);
+subfind_density.c:	    subfind_density_evaluate(j, 1, &dummy, &dummy);
+subfind_density.c:int subfind_density_evaluate(int target, int mode, int *nexport, int *nsend_local, int tp)
+subfind_density.c:int subfind_density_evaluate(int target, int mode, int *nexport, int *nsend_local)
+subfind_density.c:	      subfind_ngb_treefind_linkpairs(pos, h, target, &startnode, mode, &hmax, nexport, nsend_local);
+subfind_density.c:	    ngb = subfind_ngb_treefind_linkngb(pos, h, target, &startnode, mode, &hmax, nexport, nsend_local);
+subfind_density.c:	  ngb = subfind_ngb_treefind_linkngb(pos, h, target, &startnode, mode, &hmax, nexport, nsend_local);
+subfind_density.c:void subfind_setup_smoothinglengths(int j)
+subfind_density.c:void subfind_setup_smoothinglengths(void)
+subfind_density.c:int subfind_compare_hsml_data(const void *a, const void *b)
+subfind_density.c:void subfind_save_densities(int num)
+subfind_density.c:  parallel_sort(Hsml_list, Nhsml, sizeof(struct hsml_data), subfind_compare_hsml_data);
+subfind_density.c:	subfind_save_local_densities(num);
+subfind_density.c:void subfind_save_local_densities(int num)
+Binary file subfind_density.o matches
+subfind_distribute.c:#include "subfind.h"
+subfind_distribute.c:void subfind_distribute_groups(void)
+subfind_distribute.c:void subfind_distribute_particles(int mode)
+subfind_distribute.c:void subfind_exchange(void)
+Binary file subfind_distribute.o matches
+subfind_findlinkngb.c:#include "subfind.h"
+subfind_findlinkngb.c:void subfind_find_linkngb(void)
+subfind_findlinkngb.c:		  if(subfind_linkngb_evaluate(i, 0, &nexport, Send_count) < 0)
+subfind_findlinkngb.c:	    subfind_linkngb_evaluate(j, 1, &dummy, &dummy);
+subfind_findlinkngb.c:int subfind_linkngb_evaluate(int target, int mode, int *nexport, int *nsend_local)
+subfind_findlinkngb.c:	  ngbs = subfind_ngb_treefind_linkngb(pos, h, target, &startnode, mode, &hmax, nexport, nsend_local);
+subfind_findlinkngb.c:int subfind_ngb_treefind_linkngb(MyDouble searchcenter[3], double hsml, int target, int *startnode, int mode,
+subfind_findlinkngb.c:	  omp_qsort(R2list, numngb, sizeof(struct r2data), subfind_ngb_compare_dist);
+subfind_findlinkngb.c:	  qsort(R2list, numngb, sizeof(struct r2data), subfind_ngb_compare_dist);
+subfind_findlinkngb.c:int subfind_ngb_treefind_linkpairs(MyDouble searchcenter[3], double hsml, int target, int *startnode,
+subfind_findlinkngb.c:	  omp_qsort(R2list, numngb, sizeof(struct r2data), subfind_ngb_compare_dist);
+subfind_findlinkngb.c:	  qsort(R2list, numngb, sizeof(struct r2data), subfind_ngb_compare_dist);
+subfind_findlinkngb.c:int subfind_ngb_compare_dist(const void *a, const void *b)
+Binary file subfind_findlinkngb.o matches
+subfind.h:void subfind_col_find_candidates(int totgrouplen);
+subfind.h:void subfind_reshuffle_free(void);
+subfind.h:void subfind_distlinklist_get_two_heads(long long ngb_index1, long long ngb_index2, 
+subfind.h:int subfind_reshuffle_compare_ID_list_ID(const void *a, const void *b);
+subfind.h:void read_subfind_ids(void);
+subfind.h:int subfind_reshuffle_compare_ID_list_ID(const void *a, const void *b);
+subfind.h:int subfind_distlinklist_get_tail_set_tail_increaselen(long long index, long long *tail, long long newtail);
+subfind.h:void subfind_exchange(void);
+subfind.h:void subfind_col_save_candidates_task(int totgrouplen, int num);
+subfind.h:void subfind_col_load_candidates(int num);
+subfind.h:void subfind(int num);
+subfind.h:int subfind_overdensity_evaluate_dispersion(int target, int mode, int *nexport, int *nsend_local);
+subfind.h:int subfind_contamination_treefind(MyDouble *searchcenter, MyFloat hsml, int target, int *startnode,
+subfind.h:int subfind_ovderdens_treefind_dispersion(MyDouble searchcenter[3], MyFloat hsml, int target, int *startnode,
+subfind.h:int subfind_contamination_evaluate(int target, int mode, int *nexport, int *nsend_local);
+subfind.h:void subfind_contamination(void);
+subfind.h:int subfind_force_treeevaluate_potential(int target, int mode, int *nexport, int *nsend_local);
+subfind.h:void subfind_density(int j);
+subfind.h:void subfind_density(void);
+subfind.h:void subfind_overdensity(void);
+subfind.h:int subfind_overdensity_evaluate(int target, int mode, int *nexport, int *nsend_local);
+subfind.h:double subfind_ovderdens_treefind(MyDouble *searchcenter, MyFloat hsml, int target, int *startnode,
+subfind.h:void subfind_save_densities(int num);
+subfind.h:void subfind_save_local_densities(int num);
+subfind.h:void subfind_setup_smoothinglengths(int j);
+subfind.h:int subfind_density_evaluate(int target, int mode, int *nexport, int *nsend_local, int tp);
+subfind.h:int subfind_ngb_treefind_linkpairs(MyDouble *searchcenter, double hsml, int target, int *startnode, int mode,
+subfind.h:void subfind_setup_smoothinglengths(void);
+subfind.h:int subfind_density_evaluate(int target, int mode, int *nexport, int *nsend_local);
+subfind.h:void subfind_save_local_catalogue(int num);
+subfind.h:void subfind_save_final(int num);
+subfind.h:int subfind_linkngb_evaluate(int target, int mode, int *nexport, int *nsend_local);
+subfind.h:int subfind_ngb_treefind_linkngb(MyDouble *searchcenter, double hsml, int target, int *startnode, int mode,
+subfind.h:int subfind_ngb_treefind_nearesttwo(MyDouble *searchcenter, double hsml, int target, int *startnode, int mode,
+subfind.h:void subfind_distribute_particles(int mode);
+subfind.h:void subfind_unbind_independent_ones(int count);
+subfind.h:void subfind_distribute_groups(void);
+subfind.h:void subfind_potential_compute(int num, struct unbind_data * d, int phase, double weakly_bound_limit);
+subfind.h:void subfind_process_group_collectively(int num);
+subfind.h:int subfind_col_unbind(struct unbind_data *d, int num, int *num_non_gas);
+subfind.h:void subfind_col_determine_sub_halo_properties(struct unbind_data *d, int num, double *mass, 
+subfind.h:void subfind_col_determine_sub_halo_properties(struct unbind_data *d, int num, double *mass, 
+subfind.h:void subfind_col_determine_R200(double hmr, double center[3],
+subfind.h:void subfind_find_linkngb(void);
+subfind.h:int subfind_loctree_treebuild(int npart, struct unbind_data *mp);
+subfind.h:void subfind_loctree_update_node_recursive(int no, int sib, int father);
+subfind.h:double subfind_loctree_treeevaluate_potential(int target);
+subfind.h:void subfind_loctree_copyExtent(void);
+subfind.h:double subfind_locngb_treefind(MyDouble *xyz, int desngb, double hguess);
+subfind.h:void subfind_loctree_findExtent(int npart, struct unbind_data *mp);
+subfind.h:int subfind_locngb_treefind_variable(MyDouble *searchcenter, double hguess);
+subfind.h:size_t subfind_loctree_treeallocate(int maxnodes, int maxpart);
+subfind.h:void subfind_loctree_treefree(void);
+subfind.h:void subfind_find_nearesttwo(void);
+subfind.h:int subfind_nearesttwo_evaluate(int target, int mode, int *nexport, int *nsend_local);
+subfind.h:int subfind_process_group_serial(int gr, int offset);
+subfind.h:int subfind_unbind(struct unbind_data *ud, int len, int *len_non_gas);
+subfind.h:void subfind_determine_sub_halo_properties(struct unbind_data *ud, int num, double *mass, 
+subfind.h:void subfind_determine_sub_halo_properties(struct unbind_data *ud, int num, double *mass, 
+subfind.h:int subfind_compare_P_origindex(const void *a, const void *b);
+subfind.h:int subfind_compare_P_GrNr_DM_Density(const void *a, const void *b);
+subfind.h:int subfind_compare_P_GrNrGrNr(const void *a, const void *b);
+subfind.h:int subfind_locngb_compare_key(const void *a, const void *b);
+subfind.h:int subfind_compare_serial_candidates_subnr(const void *a, const void *b);
+subfind.h:int subfind_compare_serial_candidates_rank(const void *a, const void *b);
+subfind.h:int subfind_compare_dens(const void *a, const void *b);
+subfind.h:int subfind_compare_energy(const void *a, const void *b);
+subfind.h:int subfind_compare_grp_particles(const void *a, const void *b);
+subfind.h:int subfind_compare_candidates_boundlength(const void *a, const void *b);
+subfind.h:int subfind_compare_candidates_nsubs(const void *a, const void *b);
+subfind.h:int subfind_compare_serial_candidates_boundlength(const void *a, const void *b);
+subfind.h:int subfind_compare_P_submark(const void *a, const void *b);
+subfind.h:int subfind_compare_dist_rotcurve(const void *a, const void *b);
+subfind.h:int subfind_compare_binding_energy(const void *a, const void *b);
+subfind.h:int subfind_compare_unbind_data_Potential(const void *a, const void *b);
+subfind.h:int subfind_compare_unbind_data_seqnr(const void *a, const void *b);
+subfind.h:int subfind_compare_densities(const void *a, const void *b);
+subfind.h:int subfind_compare_candidates_rank(const void *a, const void *b);
+subfind.h:int subfind_ngb_compare_dist(const void *a, const void *b);
+subfind.h:int subfind_compare_hsml_data(const void *a, const void *b);
+subfind.h:int subfind_compare_ID_list(const void *a, const void *b);
+subfind.h:int subfind_compare_SubGroup_GrNr_SubNr(const void *a, const void *b);
+subfind.h:int subfind_compare_candidates_subnr(const void *a, const void *b);
+subfind.h:void subfind_poll_for_requests(void);
+subfind.h:long long subfind_distlinklist_setrank_and_get_next(long long index, long long *rank);
+subfind.h:long long subfind_distlinklist_get_rank(long long index);
+subfind.h:void subfind_distlinklist_set_next(long long index, long long next);
+subfind.h:void subfind_distlinklist_add_particle(long long index);
+subfind.h:void subfind_distlinklist_add_bound_particles(long long index, int nsub);
+subfind.h:void subfind_distlinklist_mark_particle(long long index, int target, int submark);
+subfind.h:long long subfind_distlinklist_get_next(long long index);
+subfind.h:long long subfind_distlinklist_get_head(long long index);
+subfind.h:void subfind_distlinklist_set_headandnext(long long index, long long head, long long next);
+subfind.h:void subfind_distlinklist_set_tailandlen(long long index, long long tail, int len);
+subfind.h:void subfind_distlinklist_get_tailandlen(long long index, long long *tail, int *len);
+subfind.h:void subfind_distlinklist_set_all(long long index, long long head, long long tail, int len, long long next);
+subfind.h:int subfind_distlinklist_get_ngb_count(long long index, long long *ngb_index1, long long *ngb_index2);
+subfind.h:long long subfind_distlinklist_set_head_get_next(long long index, long long head);
+subfind.h:int subfind_overdensity_evaluate_barinfo(int target, int mode, int *nexport, int *nsend_local);
+subfind_loctree.c:#include "subfind.h"
+subfind_loctree.c:void subfind_loctree_findExtent(int npart, struct unbind_data *mp)
+subfind_loctree.c:void subfind_loctree_copyExtent(void)
+subfind_loctree.c:int subfind_loctree_treebuild(int npart, struct unbind_data *mp)
+subfind_loctree.c:  subfind_loctree_update_node_recursive(All.MaxPart, -1, -1);
+subfind_loctree.c:void subfind_loctree_update_node_recursive(int no, int sib, int father)
+subfind_loctree.c:	      subfind_loctree_update_node_recursive(p, nextsib, no);
+subfind_loctree.c:double subfind_loctree_treeevaluate_potential(int target)
+subfind_loctree.c:int subfind_locngb_compare_key(const void *a, const void *b)
+subfind_loctree.c:double subfind_locngb_treefind(MyDouble xyz[3], int desngb, double hguess)
+subfind_loctree.c:      numngb = subfind_locngb_treefind_variable(xyz, hguess);
+subfind_loctree.c:	  qsort(R2list, numngb, sizeof(struct r2data), subfind_locngb_compare_key);
+subfind_loctree.c:int subfind_locngb_treefind_variable(MyDouble searchcenter[3], double hguess)
+subfind_loctree.c:size_t subfind_loctree_treeallocate(int maxnodes, int maxpart)	/* usually maxnodes=0.7*maxpart is sufficient */
+subfind_loctree.c:void subfind_loctree_treefree(void)
+Binary file subfind_loctree.o matches
+subfind_nearesttwo.c:#include "subfind.h"
+subfind_nearesttwo.c:void subfind_find_nearesttwo(void)
+subfind_nearesttwo.c:	  if(subfind_nearesttwo_evaluate(i, 0, &nexport, Send_count) < 0)
+subfind_nearesttwo.c:	subfind_nearesttwo_evaluate(j, 1, &dummy, &dummy);
+subfind_nearesttwo.c:int subfind_nearesttwo_evaluate(int target, int mode, int *nexport, int *nsend_local)
+subfind_nearesttwo.c:	    subfind_ngb_treefind_nearesttwo(pos, h, target, &startnode, mode, &hmax, nexport, nsend_local);
+subfind_nearesttwo.c:int subfind_ngb_treefind_nearesttwo(MyDouble searchcenter[3], double hsml, int target, int *startnode,
+Binary file subfind_nearesttwo.o matches
+Binary file subfind.o matches
+subfind_potential.c:#include "subfind.h"
+subfind_potential.c:void subfind_potential_compute(int num, struct unbind_data *d, int phase, double weakly_bound_limit)
+subfind_potential.c:	  if(subfind_force_treeevaluate_potential(d[i].index, 0, &nexport, Send_count) < 0)
+subfind_potential.c:	subfind_force_treeevaluate_potential(j, 1, &dummy, &dummy);
+Binary file subfind_potential.o matches
+subfind_reshuffle.c:#include "subfind.h"
+subfind_reshuffle.c:void subfind_reshuffle_free(void)
+subfind_reshuffle.c:void read_subfind_ids(void)
+subfind_reshuffle.c:  qsort(ID_list, Nids, sizeof(struct id_list), subfind_reshuffle_compare_ID_list_ID);
+subfind_reshuffle.c:int subfind_reshuffle_compare_ID_list_ID(const void *a, const void *b)
+Binary file subfind_reshuffle.o matches
+subfind_serial.c:#include "subfind.h"
+subfind_serial.c:int subfind_process_group_serial(int gr, int Offs)
+subfind_serial.c:  subfind_loctree_findExtent(N, ud);
+subfind_serial.c:  subfind_loctree_treebuild(N, ud);	/* build tree for all particles of this group */
+subfind_serial.c:      subfind_locngb_treefind(P[part_index].Pos, All.DesLinkNgb, P[part_index].DM_Hsml);
+subfind_serial.c:	len = subfind_unbind(ud, len, &len_non_gas);
+subfind_serial.c:  omp_qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_serial_candidates_boundlength);
+subfind_serial.c:  qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_serial_candidates_boundlength);
+subfind_serial.c:  omp_qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_serial_candidates_rank);
+subfind_serial.c:  qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_serial_candidates_rank);
+subfind_serial.c:  omp_qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_serial_candidates_subnr);
+subfind_serial.c:  qsort(candidates, count_cand, sizeof(struct cand_dat), subfind_compare_serial_candidates_subnr);
+subfind_serial.c:      subfind_determine_sub_halo_properties(ud, len, &SubMass,
+subfind_serial.c:      subfind_determine_sub_halo_properties(ud, len, &SubMass,
+subfind_serial.c:int subfind_unbind(struct unbind_data *ud, int len, int *len_non_gas)
+subfind_serial.c:      subfind_loctree_treebuild(len, ud);
+subfind_serial.c:	      pot = subfind_loctree_treeevaluate_potential(p);
+subfind_serial.c:		  pot = subfind_loctree_treeevaluate_potential(p);
+subfind_serial.c:      omp_qsort(bnd_energy, len, sizeof(double), subfind_compare_binding_energy);	/* largest comes first! */
+subfind_serial.c:      qsort(bnd_energy, len, sizeof(double), subfind_compare_binding_energy);	/* largest comes first! */
+subfind_serial.c:int subfind_compare_grp_particles(const void *a, const void *b)
+subfind_serial.c:  Zstar = get_metallicity_subfind(PART_index) / 0.02;
+subfind_serial.c:void subfind_determine_sub_halo_properties(struct unbind_data *d, int num, double *totmass,
+subfind_serial.c:void subfind_determine_sub_halo_properties(struct unbind_data *d, int num, double *totmass,
+subfind_serial.c:      omp_qsort(rr_list, num_use, sizeof(sort_r2list), subfind_compare_dist_rotcurve);
+subfind_serial.c:      qsort(rr_list, num_use, sizeof(sort_r2list), subfind_compare_dist_rotcurve);
+subfind_serial.c:  omp_qsort(rr_list_gal, num, sizeof(sort_r2list), subfind_compare_dist_rotcurve);
+subfind_serial.c:  qsort(rr_list_gal, num, sizeof(sort_r2list), subfind_compare_dist_rotcurve);
+subfind_serial.c:	  (*SFRgas) += get_starformation_rate_subfind(rr_list_gal[i].index, &Temperature, &xclouds);
+subfind_serial.c:	      Zgas_in_bin[rad_bin] += get_metallicity_subfind(rr_list_gal[i].index) / 0.02 * mcold;
+subfind_serial.c:	      (*meanzstar) += get_metallicity_subfind(rr_list_gal[i].index) / 0.02;
+subfind_serial.c:void subfind_col_determine_sub_halo_properties(struct unbind_data *d, int num, double *totmass,
+subfind_serial.c:void subfind_col_determine_sub_halo_properties(struct unbind_data *d, int num, double *totmass,
+subfind_serial.c:      parallel_sort(loc_rr_list, num_use, sizeof(sort_r2list), subfind_compare_dist_rotcurve);
+subfind_serial.c:      parallel_sort(loc_rr_list_star, nstarloc, sizeof(sort_r2list), subfind_compare_dist_rotcurve);
+subfind_serial.c:	      loc_SFRgas += get_starformation_rate_subfind(part_index, &Temperature, &xclouds);
+subfind_serial.c:		  Zgas_in_bin[rad_bin] += get_metallicity_subfind(part_index) / 0.02 * mcold;
+subfind_serial.c:	      loc_meanzstar += get_metallicity_subfind(part_index) / 0.02;
+subfind_serial.c:int subfind_compare_serial_candidates_boundlength(const void *a, const void *b)
+subfind_serial.c:int subfind_compare_serial_candidates_rank(const void *a, const void *b)
+subfind_serial.c:int subfind_compare_serial_candidates_subnr(const void *a, const void *b)
+Binary file subfind_serial.o matches
+subfind_so.c:#include "subfind.h"
+subfind_so.c:void subfind_overdensity(void)
+subfind_so.c:		      if(subfind_overdensity_evaluate(i, 0, &nexport, Send_count) < 0)
+subfind_so.c:		subfind_overdensity_evaluate(j, 1, &dummy, &dummy);
+subfind_so.c:	      if(subfind_overdensity_evaluate_dispersion(i, 0, &nexport, Send_count) < 0)
+subfind_so.c:	    subfind_overdensity_evaluate_dispersion(j, 1, &dummy, &dummy);
+subfind_so.c:	      if(subfind_overdensity_evaluate_barinfo(i, 0, &nexport, Send_count) < 0)
+subfind_so.c:	    subfind_overdensity_evaluate_barinfo(j, 1, &dummy, &dummy);
+subfind_so.c:int subfind_overdensity_evaluate(int target, int mode, int *nexport, int *nsend_local)
+subfind_so.c:	  massret = subfind_ovderdens_treefind(pos, h, target, &startnode, mode, nexport, nsend_local);
+subfind_so.c:double subfind_ovderdens_treefind(MyDouble searchcenter[3], MyFloat hsml, int target, int *startnode,
+subfind_so.c:int subfind_overdensity_evaluate_dispersion(int target, int mode, int *nexport, int *nsend_local)
+subfind_so.c:	  ngb = subfind_ovderdens_treefind_dispersion(pos, h, target, &startnode, mode, nexport, nsend_local);
+subfind_so.c:int subfind_overdensity_evaluate_barinfo(int target, int mode, int *nexport, int *nsend_local)
+subfind_so.c:	  ngb = subfind_ovderdens_treefind_dispersion(pos, h, target, &startnode, mode, nexport, nsend_local);
+subfind_so.c:int subfind_ovderdens_treefind_dispersion(MyDouble searchcenter[3], MyFloat hsml, int target, int *startnode,
+Binary file subfind_so.o matches
+subfind_vars.c:#include "subfind.h"
+Binary file subfind_vars.o matches
+Template-Config.sh:#KEEP_HSML_AS_GUESS                 # keep using hsml for gas particles in subfind_density
+Template-Config.sh:#WRITE_SUB_IN_SNAP_FORMAT           # Save subfind results in snap format
+Template-Config.sh:#KD_CHOOSE_PSUBFIND_LIMIT           # Increases the limit for the parallel subfind to the maximum possible
+treecreate.c:  /* original position in subfind output */
+treecreate.c:	  /* store position of halo in subfind output */

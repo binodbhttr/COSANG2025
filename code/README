@@ -1,0 +1,91 @@
+Cosang_v18.2:
+
+Extrap.c was created.
+
+Extrapolation was added to correct for certain galaxy parameters between snapshots.
+
+
+Cosang_v18.1:
+
+Mass adjustment has been added to subtract mass from particles within in the virial radius based on the galaxy mass.
+
+
+
+Cosang_v18:
+
+Memory bugs from version 17.2 have been resolved.
+
+Disk orientation has been added.
+
+disk_orient.c was created
+
+Restarting from a previous snapshot works now but the command has changed from
+
+2 snapshot#  to  2 0 snapshot#
+
+
+
+Cosang_v17.2:
+
+Several memory errors have been fixed but some still remain.  If you are having constant crashes add:
+
+export MALLOC_CHECK_=3 
+
+to your shell script file before the executable command.
+
+
+
+Cosang_v17: version up to 2/14/2015
+
+Makefile has option added tree_sage_run which runs the codes but does not add in extra forces.
+
+tree_sage_run must be turned on if THIS_IS_A_COSANG_RUN is active
+
+The Treefile.txt and sagefile.txt do not have to be reset when restarting the files will be overwritten if they exist
+
+To run just Gadget: ./P-Gadget3 <Path to Gadget Parameter file>
+To run everything:  ./P-Gadget3 <Path to Gadget Parameter file> <Path to Sage Parameter file>
+To restart: ./P-Gadget3 <Path to Gadget Parameter file> <Path to Sage Parameter file> 1
+To restart if the tree code and sage did not run due to zero Halos found up to the restartfile time: 
+		./P-Gadget3 <Path to Gadget Parameter file> <Path to Sage Parameter file> 1 1
+
+Force equations have been added to CoSANG which include: Bulge, BH, Radial and Vertical disk forces.
+
+
+
+Cosang_v16: version up to 12/4/2014
+
+Fixed SAGE metallicity array which was not being reset after each snapshot.
+
+Results from Cosang ZeroForce should be same as if all codes were run independently.
+
+
+README version 10.2
+
+Efficiency mpi changes in progress lastest version up to date 09/09/2014.
+
+
+README for Cosang_v7:
+
+Files have been added to read the subfind files and find the particles belonging to the halos with galaxies.
+
+Luke provided a hash table file to use to match and find the particle ids on the processors.
+
+Match_ids() is called in gravtree.c
+  -This calls the functions to read the subfind files and link up the particles 
+  -It also calls the force and potential functions for the galaxies.
+
+NOTE: For future issues with All.TimeMax
+
+In run.c the statement if(All.Ti_Currne >= TIMEBASE) was changed to if(All.Time >= All.TimeMax)
+because Ti_Current was not working for a 1 interval snapshot run and would not match TIMEBASE
+in time for TimeMax and continue running the simulation past this point.
+
+
+The Merger Tree code has been integrated
+
+SAGE has been integrated
+
+This is a working code that runs the tree code and Sage after every snapshot is created.
+
+

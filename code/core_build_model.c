@@ -244,7 +244,7 @@ void evolve_galaxies(int halonr, int ngal)	// note: halonr is here the FOF-backg
 
   /* ============================================================================
      [DIAGNOSTIC PRINTS FOR CENTRAL GALAXY CONSISTENCY CHECK]
-     Added by Antigravity on July 12, 2026.
+     Added by Binod B on July 12, 2026.
      
      This abort is triggered when SAGE finds that the central galaxy of the 
      FOF group (retrieved via Gal[0].CentralGal) is either out of bounds, 

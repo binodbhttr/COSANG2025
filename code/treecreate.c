@@ -63,7 +63,7 @@ struct halo_aux_data
 
 
 /* ============================================================================
-   [STACK SIZE OVERRIDE FIX] - Added by Antigravity on July 11, 2026.
+   [STACK SIZE OVERRIDE FIX] - Added by Binod on July 11, 2026.
    To bypass queue daemon pbs_mom's hard stack limits (which block setrlimit),
    we implement an iterative DFS traversal using an explicit heap-allocated 
    stack array (walk_stack).
@@ -443,7 +443,14 @@ void generate_trees(void)
   for(filenr = 0; filenr < FilesPerSnapshot; filenr++)
     for(i = 0; i < Cats[LastSnapShotNr].TotNsubhalos; i++)
       {
-	if(HaloAux[i].UsedFlag == 0)
+	/* ============================================================================
+	   [GAP ROOT SAFETY CHECK]
+	   Added on July 12, 2026, 21:47:12-07:00.
+	   
+	   Do not select unpopulated gap subhalos (FirstHaloInFOFgroup < 0) 
+	   as tree roots, to prevent SAGE from constructing empty trees.
+	   ============================================================================ */
+	if(HaloAux[i].UsedFlag == 0 && Halo[i].FirstHaloInFOFgroup >= 0)
 	  {
 	    if(filenr == whichfile(Halo[i].Pos))
 	      {
@@ -501,7 +508,14 @@ void generate_trees(void)
 
       for(i = 0; i < Cats[LastSnapShotNr].TotNsubhalos; i++)
 	{
-	  if(HaloAux[i].UsedFlag == 0)
+	  /* ============================================================================
+	     [GAP ROOT SAFETY CHECK]
+	     Added on July 12, 2026, 21:47:12-07:00.
+	     
+	     Do not select unpopulated gap subhalos (FirstHaloInFOFgroup < 0) 
+	     as tree roots, to prevent SAGE from constructing empty trees.
+	     ============================================================================ */
+	  if(HaloAux[i].UsedFlag == 0 && Halo[i].FirstHaloInFOFgroup >= 0)
 	    {
 	      if(filenr == whichfile(Halo[i].Pos))
 		{

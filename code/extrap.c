@@ -136,6 +136,11 @@ void Gal_search()
 {
 
   int i, j;
+  for(j=0; j<NumGalaxies; j++)
+  {
+      rotation_angles(j);
+  }
+
   //printf("Gal_search\n");
   for(i=0; i<NumGalaxies; i++)
   {
@@ -173,11 +178,6 @@ void Gal_search()
     AllGal[i].Velb[0] = AllGal[i].Vel[0];
     AllGal[i].Velb[1] = AllGal[i].Vel[1];
     AllGal[i].Velb[2] = AllGal[i].Vel[2];
-
-    for(j=0; j<NumGalaxies; j++)
-    {
-        rotation_angles(j);
-    }
 
 
     for(j=0; j<OldNumGalaxies; j++)
@@ -330,7 +330,7 @@ void calc_Radius_slopes(int newgal, int oldgal)
 
   }
 
-  scalediff2 = AllGal[i].timestep - OldGal[i].timestep;
+  scalediff2 = AllGal[newgal].timestep - OldGal[oldgal].timestep;
  /* if(ThisTask == 0)
   {
    printf("DiskScaleRadius = %f, NewDiskRadius = %f\n", AllGal[newgal].DiskScaleRadius, AllGal[newgal].NewDiskScaleRadius);

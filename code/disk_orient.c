@@ -52,9 +52,17 @@ void rotation_angles(int galaxy)
    
 
 
-//Rotate about z axis based on Jx and Jy
-
    Jmag = sqrt(Jx*Jx + Jy*Jy + Jz*Jz);
+   
+   if (Jx*Jx + Jy*Jy < 1e-10)
+   {
+       static int print_count1 = 0;
+       if (print_count1 < 10)
+       {
+           printf("[DEBUG Rank %d WARNING] Z-aligned or zero-spin Jx/Jy detected! galaxy=%d, J=(%g,%g,%g)\n", ThisTask, galaxy, Jx, Jy, Jz);
+           print_count1++;
+       }
+   }
    
    thetaz = fabs(atanf(Jy / Jx));
 
@@ -78,6 +86,26 @@ void rotation_angles(int galaxy)
 
    Jmag2 = sqrt(Jxp * Jxp + Jyp * Jyp + Jzp * Jzp);
  
+   if (Jmag2 < 1e-10)
+   {
+       static int print_count2 = 0;
+       if (print_count2 < 10)
+       {
+           printf("[DEBUG Rank %d WARNING] Zero-spin magnitude galaxy detected! galaxy=%d, Jmag2=%g\n", ThisTask, galaxy, Jmag2);
+           print_count2++;
+       }
+   }
+   else if (fabs(Jz / Jmag2) > 1.0)
+   {
+       static int print_count3 = 0;
+       if (print_count3 < 10)
+       {
+           printf("[DEBUG Rank %d WARNING] Out-of-bounds acosf arg detected! galaxy=%d, Jz=%g, Jmag2=%g, arg=%g (diff=%g)\n", 
+                  ThisTask, galaxy, Jz, Jmag2, Jz / Jmag2, fabs(Jz / Jmag2) - 1.0);
+           print_count3++;
+       }
+   }
+
 //Dot product of J vector to z axis (0,0,1) to find angle of rotation about y axis
 
    thetay = acosf(Jz / Jmag2);
@@ -255,6 +283,13 @@ double Calculate_Disk_RadF(int target, int gal)
 
 #endif
 
+    /* Guard against diskscaler <= 1e-10 to prevent division-by-zero
+       when computing disk forces for galaxies with no disk. */
+    if(diskscaler <= 1e-10)
+    {
+        return 0.0;
+    }
+
 
     xmin = DBL_MIN; 
     diskR = 0;
@@ -367,6 +402,13 @@ double Calculate_Disk_VerF(int target, int gal)
 
 #endif
 
+    /* Guard against diskscaler <= 1e-10 to prevent division-by-zero
+       when computing disk forces for galaxies with no disk. */
+    if(diskscaler <= 1e-10)
+    {
+        return 0.0;
+    }
+
     dirz = -1.0;
     Fvcorr = 1.0;
     Fvdamp = 1.0;
@@ -413,7 +455,8 @@ double Calculate_Disk_VerF(int target, int gal)
 
     //zo = 0.7 / All.Time;  //scale height of disk .2kpc
 zo =diskscaler/9.4;
-   x_MN=b/diskscaler;
+b = fabs(zo);
+x_MN=b/diskscaler;
         x3=pow(x_MN,3.0);
         x4=x3*x_MN;
         //this potential is taken from Smith et al 2015

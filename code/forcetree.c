@@ -1815,6 +1815,8 @@ void force_gal(int gal, int target)
     surfaceden = 0.0;
     //diskR2 = 0.0;
     diskmass = 0;
+    diskscaler = 0.0;
+    zo = 0.0;
     xmin = DBL_MIN;
     xmax = -GSL_LOG_DBL_MAX - 0.5 * 6.9 - 0.01;
 	
@@ -1873,21 +1875,6 @@ AllGal[gal].CM_Pos[2]=0;*/
 
 #endif        
 	
-	// diskR is cylindrical radius of the particle modified by the softening
-	//printf("r in forcetree=%f\n",r);
-	//in test force this is if( diskR )but it is on r here. I changed to diskR for test.
-   if(r <= 200.0*diskscaler)
-   {
-       BulgeF = (bgemass * r ) / (All.HubbleParam * sqrt(r*r + Softhalo * Softhalo) * pow((sqrt(r*r + Softhalo * Softhalo) + rscale), 2.0)); 
-    
-#ifdef Disk_Orientation
-
-       RotateR(target, gal);
-//	printf("DiO\n");
-       Final_Disk_Forces(target, gal);
-#else
-//#endif
-
 #ifdef Extrap
     if(snap_oldgal_count > 1)
     {
@@ -1900,11 +1887,27 @@ AllGal[gal].CM_Pos[2]=0;*/
        diskscaler =  AllGal[gal].DiskScaleRadius / All.Time;
     }
 #else
-
     diskmass = (AllGal[gal].StellarMass - AllGal[gal].BulgeMass) + AllGal[gal].ColdGas;
     diskscaler =  AllGal[gal].DiskScaleRadius / All.Time;
-
 #endif
+    zo = diskscaler / 9.4;
+
+	// diskR is cylindrical radius of the particle modified by the softening
+	//printf("r in forcetree=%f\n",r);
+	//in test force this is if( diskR )but it is on r here. I changed to diskR for test.
+   /* Guard against diskscaler <= 1e-10 to prevent division-by-zero
+      when computing disk forces for galaxies with no disk. */
+   if(diskscaler > 1e-10 && r <= 200.0*diskscaler)
+   {
+       BulgeF = (bgemass * r ) / (All.HubbleParam * sqrt(r*r + Softhalo * Softhalo) * pow((sqrt(r*r + Softhalo * Softhalo) + rscale), 2.0)); 
+    
+#ifdef Disk_Orientation
+
+       RotateR(target, gal);
+//	printf("DiO\n");
+       Final_Disk_Forces(target, gal);
+#else
+//#endif
 
 	//printf("FT2\n");
        //diskmass = (AllGal[gal].StellarMass - AllGal[gal].BulgeMass) + AllGal[gal].ColdGas;
@@ -2050,6 +2053,13 @@ AllGal[gal].CM_Pos[2]=0;*/
 
 
     
+/* Check for NaN acceleration values to diagnose failures */
+    if (ad[0] != ad[0] || ad[1] != ad[1] || ad[2] != ad[2])
+    {
+        printf("[DEBUG Rank %d ERROR] NaN detected in force_gal() for target=%d (Part-ID=%llu), host galaxy=%d. BulgeF=%g, BHforce=%g, DiskF=(%g,%g,%g), ForceDiskRad=%g, ForceDiskVer=%g, diskscaler=%g, diskmass=%g, zo=%g, r=%g, dx=%g, dy=%g, dz=%g\n",
+               ThisTask, target, (unsigned long long)P[target].ID, gal, BulgeF, BHforce, DiskF.Fx, DiskF.Fy, DiskF.Fz, ForceDiskRad, ForceDiskVer, diskscaler, diskmass, zo, r, dx, dy, dz);
+    }
+
 /* store result at the proper place */
         P[target].g.GravAccel[0] += All.G * ad[0];
         P[target].g.GravAccel[1] += All.G * ad[1];

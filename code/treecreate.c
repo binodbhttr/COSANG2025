@@ -449,6 +449,7 @@ void generate_trees(void)
 	   
 	   Do not select unpopulated gap subhalos (FirstHaloInFOFgroup < 0) 
 	   as tree roots, to prevent SAGE from constructing empty trees.
+     // if(HaloAux[i].UsedFlag == 0)
 	   ============================================================================ */
 	if(HaloAux[i].UsedFlag == 0 && Halo[i].FirstHaloInFOFgroup >= 0)
 	  {

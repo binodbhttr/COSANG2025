@@ -136,6 +136,13 @@ void Gal_search()
 {
 
   int i, j;
+
+  for(j=0; j<NumGalaxies; j++)
+  {
+     rotation_angles(j);
+  }
+
+
   //printf("Gal_search\n");
   for(i=0; i<NumGalaxies; i++)
   {
@@ -174,11 +181,10 @@ void Gal_search()
     AllGal[i].Velb[1] = AllGal[i].Vel[1];
     AllGal[i].Velb[2] = AllGal[i].Vel[2];
 
-    for(j=0; j<NumGalaxies; j++)
-    {
-        rotation_angles(j);
-    }
-
+    // for(j=0; j<NumGalaxies; j++)
+    // {
+    //     rotation_angles(j);
+    // }
 
     for(j=0; j<OldNumGalaxies; j++)
     {

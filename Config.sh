@@ -34,7 +34,7 @@ ENLARGEREGION=1.5
 
 #--------------------------------------- Multi-Domain and Top-Level Tree options
 MULTIPLEDOMAINS=4
-#TOPNODEFACTOR=3.0
+TOPNODEFACTOR=3.0
 #KD_HMAX_ESTIMATE           # Alternative way to update HMAX within Tree nodes
 
 #--------------------------------------- Things that are always recommended

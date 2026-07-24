@@ -9,6 +9,7 @@ printf(
 "        PLACEHIGHRESREGION=2\n"
 "        ENLARGEREGION=1.5\n"
 "        MULTIPLEDOMAINS=4\n"
+"        TOPNODEFACTOR=3.0\n"
 "        PEANOHILBERT\n"
 "        WALLCLOCK\n"
 "        MYSORT\n"

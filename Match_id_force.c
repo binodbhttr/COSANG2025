@@ -159,16 +159,21 @@ void Match_ids()
         {
            if((gidx = hash_lookup(hash3, P[partidx].ID)) != HASH_INVALID)
            {
-             if(AllGal[gidx].sub_len >= 1000)
-             {
+              /* PREVIOUS CODE: if(AllGal[gidx].sub_len >= 1000) - Missing array bounds validation */
+              /* ADDED FIX: Bounds check to prevent out-of-bounds access to AllGal[gidx] if hash returns stray index */
+              if(gidx >= 0 && gidx < NumGalaxies)
+              {
+                 if(AllGal[gidx].sub_len >= 1000)
+                 {
 #ifdef Mass_Adjust
-                Adjust_Particlemass(gidx, partidx);
+                    Adjust_Particlemass(gidx, partidx);
 #endif
-            
+                
 		//test printf
 		//printf("MID1\n");
-                force_gal(gidx, partidx);
-             }      
+                    force_gal(gidx, partidx);
+                 }
+              }      
                  
            }
         }
@@ -270,14 +275,19 @@ void Match_ids()
       if((partidx = hash_lookup(hashtable, mispidtot[i])) != HASH_INVALID)
         {
            gidx = misgidtot[i];
-           if(AllGal[gidx].sub_len >= 1000)
+           /* PREVIOUS CODE: if(AllGal[gidx].sub_len >= 1000) - Missing array bounds validation */
+           /* ADDED FIX: Bounds check to prevent out-of-bounds access to AllGal[gidx] for cross-rank gathered missing galaxy IDs */
+           if(gidx >= 0 && gidx < NumGalaxies)
            {
+              if(AllGal[gidx].sub_len >= 1000)
+              {
 #ifdef Mass_Adjust
-             Adjust_Particlemass(gidx, partidx);
+                Adjust_Particlemass(gidx, partidx);
 #endif
 		//test printf
 		//printf("MID2\n");           
-             force_gal(gidx, partidx); 
+                force_gal(gidx, partidx); 
+              }
            }
         }
      }

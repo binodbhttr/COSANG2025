@@ -1,0 +1,362 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>  
+#include <mpi.h> 
+
+#include "proto.h"
+#include "allvars.h"
+#include "hash.h"
+
+void Match_ids()
+{
+    int i, a, b, ii, j, aa;
+    int partidx;
+    int gidx;
+    int p_length;
+    int pcounter;
+    int mboundidx;
+    int misscount;
+    int countm;
+    int totmpart[NTask];
+    unsigned int *mipart;
+    int *migidx;
+    int totalreceive;
+    unsigned int *temppart;
+    int *tempgidx;
+    int tag1, tag2, tag3, tag4, tag5, tag6;
+    int zero_count;
+
+    tag1 = 1; 
+    tag2 = 2;
+    tag3 = 3;
+    tag4 = 4;
+    tag5 = 5;
+    tag6 = 6;
+    totalreceive = 0;
+    countm = 0;
+    misscount = 0;
+    partidx = 0;
+    gidx = 0;
+    pcounter = 0;
+    hash_t* hashtable;
+    hash_t* hash3;
+    
+    hashtable = hash_new(NumPart);
+
+    for(b=0; b<NumPart; b++)
+    {
+       hash_insert(hashtable, P[b].ID, b);
+    }
+
+
+   hash3 = hash_new(counter3);
+
+   for(ii=0; ii<counter3; ii++)
+   {
+     hash_insert(hash3, P_list[ii], G_list[ii]);
+   }
+
+#ifdef Extrap
+//Mostbound_ID search to fill AllGal.NewGalPos[] based on the current position of the mostbound particle. 
+//Using hashtable to find the particle across the processors then bcast it out.
+/*******************************************************************************************/
+
+
+   for(j=0; j<NumGalaxies; j++)
+   {
+       if(ThisTask == 0)
+       {
+          zero_count = 0;
+
+          if((mboundidx = hash_lookup(hashtable, AllGal[j].mostbound)) != HASH_INVALID)
+          {
+              AllGal[j].NewGalPos[0] = P[mboundidx].Pos[0];
+              AllGal[j].NewGalPos[1] = P[mboundidx].Pos[1];
+              AllGal[j].NewGalPos[2] = P[mboundidx].Pos[2];
+              if(snap_oldgal_count == 1)
+              {
+                 OldGal[j].oldGalPos[0] = P[mboundidx].Pos[0];
+                 OldGal[j].oldGalPos[1] = P[mboundidx].Pos[1];
+                 OldGal[j].oldGalPos[2] = P[mboundidx].Pos[2];
+              }
+              
+              zero_count = 1;
+              //printf("Task 0: POS[0] = %f, Pos[1] = %f, Pos[2] = %f\n", AllGal[j].NewGalPos[0], AllGal[j].NewGalPos[1], AllGal[j].NewGalPos[2]);
+          }
+
+       }
+       for (aa=1; aa<NTask; aa++)
+       {
+
+         if(ThisTask == aa)
+         {
+          if((mboundidx = hash_lookup(hashtable, AllGal[j].mostbound)) != HASH_INVALID)
+          {
+              AllGal[j].NewGalPos[0] = P[mboundidx].Pos[0];
+              AllGal[j].NewGalPos[1] = P[mboundidx].Pos[1];
+              AllGal[j].NewGalPos[2] = P[mboundidx].Pos[2];
+
+              MPI_Send(&AllGal[j].NewGalPos[0], 1, MPI_FLOAT, 0, tag1, MPI_COMM_WORLD);
+              MPI_Send(&AllGal[j].NewGalPos[1], 1, MPI_FLOAT, 0, tag2, MPI_COMM_WORLD);
+              MPI_Send(&AllGal[j].NewGalPos[2], 1, MPI_FLOAT, 0, tag3, MPI_COMM_WORLD);
+ 
+              if(snap_oldgal_count == 1)
+              {
+                 OldGal[j].oldGalPos[0] = P[mboundidx].Pos[0];
+                 OldGal[j].oldGalPos[1] = P[mboundidx].Pos[1];
+                 OldGal[j].oldGalPos[2] = P[mboundidx].Pos[2];
+
+                 MPI_Send(&OldGal[j].oldGalPos[0], 1, MPI_FLOAT, 0, tag4, MPI_COMM_WORLD);
+                 MPI_Send(&OldGal[j].oldGalPos[1], 1, MPI_FLOAT, 0, tag5, MPI_COMM_WORLD);
+                 MPI_Send(&OldGal[j].oldGalPos[2], 1, MPI_FLOAT, 0, tag6, MPI_COMM_WORLD);
+              }            
+            
+          }
+         }
+       }
+
+       if(ThisTask == 0 && zero_count == 0)  
+       {
+           
+
+           MPI_Recv(&AllGal[j].NewGalPos[0], 1, MPI_FLOAT, MPI_ANY_SOURCE, tag1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+           MPI_Recv(&AllGal[j].NewGalPos[1], 1, MPI_FLOAT, MPI_ANY_SOURCE, tag2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+           MPI_Recv(&AllGal[j].NewGalPos[2], 1, MPI_FLOAT, MPI_ANY_SOURCE, tag3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+
+           if(snap_oldgal_count == 1)
+           {
+              MPI_Recv(&OldGal[j].oldGalPos[0], 1, MPI_FLOAT, MPI_ANY_SOURCE, tag4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+              MPI_Recv(&OldGal[j].oldGalPos[1], 1, MPI_FLOAT, MPI_ANY_SOURCE, tag5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+              MPI_Recv(&OldGal[j].oldGalPos[2], 1, MPI_FLOAT, MPI_ANY_SOURCE, tag6, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+           }
+           if(j <= 10)
+           {
+             //  printf("Task 0: Mostbound: MBID = %lld, MBID POS: x = %f, y = %f, z = %f , Gal Pos: x = %f, y = %f, z = %f \n", AllGal[j].mostbound, AllGal[j].NewGalPos[0], AllGal[j].NewGalPos[1], AllGal[j].NewGalPos[2], AllGal[j].Pos[0], AllGal[j].Pos[1], AllGal[j].Pos[2]);
+           }
+
+           //printf("Task 0 Recv: POS[0] = %f, Pos[1] = %f, Pos[2] = %f\n", AllGal[j].NewGalPos[0], AllGal[j].NewGalPos[1], AllGal[j].NewGalPos[2]);
+       }
+         
+        
+       MPI_Barrier(MPI_COMM_WORLD);
+       MPI_Bcast(&AllGal[j].NewGalPos[0],1,MPI_FLOAT,0,MPI_COMM_WORLD);
+       MPI_Bcast(&AllGal[j].NewGalPos[1],1,MPI_FLOAT,0,MPI_COMM_WORLD);
+       MPI_Bcast(&AllGal[j].NewGalPos[2],1,MPI_FLOAT,0,MPI_COMM_WORLD);
+
+       if(snap_oldgal_count == 1)
+       {
+          MPI_Barrier(MPI_COMM_WORLD);
+          MPI_Bcast(&OldGal[j].oldGalPos[0],1,MPI_FLOAT,0,MPI_COMM_WORLD);
+          MPI_Bcast(&OldGal[j].oldGalPos[1],1,MPI_FLOAT,0,MPI_COMM_WORLD);
+          MPI_Bcast(&OldGal[j].oldGalPos[2],1,MPI_FLOAT,0,MPI_COMM_WORLD);
+       }
+        
+   }   
+
+/******************************************************************************************************/
+
+   if(snap_oldgal_count > 1 && galsearchcount == 0)
+   {
+      Gal_search();
+
+      galsearchcount = 1;
+   }
+#endif
+
+
+   for(i=0; i<counter3; i++)
+   {
+      if((partidx = hash_lookup(hashtable, P_list[i])) != HASH_INVALID)
+        {
+           //do nothing
+        }
+       else
+       {
+
+          misscount = misscount + 1;
+       }
+   }
+ 
+    if((mipart = (unsigned int *)malloc((misscount) * sizeof(unsigned int))) == NULL)
+    {
+          perror("Failed to allocate for mipart...");
+          return;
+    }
+
+    if((migidx = (int *)malloc((misscount) * sizeof(int))) == NULL)
+    {
+          perror("Failed to allocate for migidx...");
+          return;
+    }
+
+   for(i=0; i<counter3; i++)
+   {
+      if((partidx = hash_lookup(hashtable, P_list[i])) != HASH_INVALID)
+        {
+           if((gidx = hash_lookup(hash3, P[partidx].ID)) != HASH_INVALID)
+           {
+#ifdef Mass_Adjust
+             Adjust_Particlemass(gidx, partidx);
+#endif
+             force_gal(gidx, partidx);
+             
+                 
+           }
+        }
+        else
+        {
+          mipart[countm] = P_list[i];
+          migidx[countm] = G_list[i];
+          countm = countm + 1;
+        }
+   }
+
+   hash_delete(hash3);
+
+   MPI_Allgather(&countm, 1, MPI_INT, totmpart, 1, MPI_INT, MPI_COMM_WORLD);
+
+
+   for(i=0; i<NTask; i++)
+   {
+     
+      totalreceive = totalreceive + totmpart[i];
+   } 
+
+
+   for(a=0; a<NTask; a++)
+   {
+
+    if((temppart = (unsigned int *)malloc((totmpart[a]) * sizeof(unsigned int))) == NULL)
+    {
+          perror("Failed to allocate for mipart...");
+          return;
+    }
+
+    if((tempgidx = (int *)malloc((totmpart[a]) * sizeof(int))) == NULL)
+    {
+          perror("Failed to allocate for migidx...");
+          return;
+    }
+     
+     if(ThisTask == a)
+     {
+        for(j=0; j<countm; j++)
+        {
+           temppart[j] = mipart[j];
+           tempgidx[j] = migidx[j];
+        }
+
+      }
+
+     MPI_Barrier(MPI_COMM_WORLD);
+     MPI_Bcast(temppart, totmpart[a], MPI_UNSIGNED, a, MPI_COMM_WORLD);    
+     MPI_Bcast(tempgidx, totmpart[a], MPI_INT, a, MPI_COMM_WORLD);
+
+
+     for(i=0; i<totmpart[a]; i++)
+     {
+      if((partidx = hash_lookup(hashtable, temppart[i])) != HASH_INVALID)
+        {
+           gidx = tempgidx[i];
+#ifdef Mass_Adjust
+           Adjust_Particlemass(gidx, partidx);
+#endif
+           force_gal(gidx, partidx); 
+             
+        }
+     }
+
+     MPI_Barrier(MPI_COMM_WORLD);
+
+     free(temppart);
+     free(tempgidx);
+     temppart = NULL;
+     tempgidx = NULL;
+   }
+   
+
+  
+     printf("Deleting hash table\n");
+     hash_delete(hashtable);
+     free(mipart);
+     free(migidx);
+     mipart = NULL;
+     migidx = NULL;  
+     return;
+}
+
+
+void Adjust_Particlemass(int gal, int target)
+{
+   double TotGalMass, TotMassHalo, Tpartmass;
+   double px, py, pz, r, dm;
+   int Parthalo;
+   double partmass, fracmass, masspart2;
+
+   px = P[target].Pos[0] - AllGal[gal].haloPos[0];
+   py = P[target].Pos[1] - AllGal[gal].haloPos[1];
+   pz = P[target].Pos[2] - AllGal[gal].haloPos[2];
+
+   Parthalo = AllGal[gal].group_len;
+   partmass = P[target].InitMass;
+ 
+ 
+
+   r = sqrt(px*px + py*py + pz*pz);
+
+#ifdef Extrap
+   if(snap_oldgal_count > 1)
+   {
+      TotGalMass = AllGal[gal].NewBlackHoleMass + AllGal[gal].NewBulgeMass + (AllGal[gal].NewStellarMass - AllGal[gal].NewBulgeMass) + AllGal[gal].NewColdGas; 
+   }
+   else
+   {
+      TotGalMass = AllGal[gal].BlackHoleMass + AllGal[gal].BulgeMass + (AllGal[gal].StellarMass - AllGal[gal].BulgeMass) + AllGal[gal].ColdGas; 
+   }
+#else
+
+     TotGalMass = AllGal[gal].BlackHoleMass + AllGal[gal].BulgeMass + (AllGal[gal].StellarMass - AllGal[gal].BulgeMass) + AllGal[gal].ColdGas;
+  
+#endif
+
+
+/*
+   //TotMassHalo = partmass * Parthalo;
+
+   //Tpartmass = TotMassHalo - TotGalMass;
+
+   dm = TotGalMass / (double) Parthalo;
+
+   //dm = partmass - masspart2;
+
+ 
+
+
+   if(r <= AllGal[gal].halovir)
+   {
+    
+      P[target].Mass = P[target].Mass - dm;
+ 
+   } 
+*/
+
+   fracmass = partmass / AllGal[gal].Mvir;
+
+   dm = fracmass * TotGalMass;
+
+
+   if(r <= AllGal[gal].halovir)
+   {
+
+      P[target].Mass = P[target].Mass - dm;
+
+   }
+
+
+
+
+return;
+
+}  

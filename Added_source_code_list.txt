@@ -1,0 +1,84 @@
+File Key (Files added to Gadget3): Up to date for latest version
+
+L-Basetree: (version 4.1 and on)
+
+allvars_bt.h  (deleted)
+allvars_bt.c  (deleted)
+proto_bt.h
+basetree.c
+system_bt.c
+mymalloc_bt.c
+
+L-Halotree:  (version 4.2 and on)
+
+treecreate.c
+peano_ht.c
+mymalloc_ht.c
+
+Reading Files:
+
+sage_pathsread.c  
+Halotree_read.c
+halo_pathnames.c
+sage_read.c 
+lock_file.c
+
+Subfind: (version 5.1 and on)
+
+read_subp_single.c
+read_subp_multiple.c
+read_subfind_ids.c
+
+sub_particle_list.c
+
+Forces:  (version 5.1 and on)
+
+Match_id_force.c
+hash.c
+hash.h //hash files were created by Luke Hodkinson, 2014
+
+Sage:(sage_merge, ver. 8 and on)  Sage files created by Darren Croton
+
+core_proto.h
+core_simulation.h
+sage.c
+core_init.c
+core_read_parameter_file.c
+core_io_tree.c
+core_mymalloc.c
+core_build_model.c
+core_cool_func.c
+core_save.c
+model_cooling.c
+
+
+model_disk_instablitiy.c
+model_infall.c
+model_mergers.c
+model_misc.c
+model_reincorporation.c
+model_starformation_and_feedback.c
+model_z_dependent_sf.c
+
+CoSANG added functions: (Version 10)
+mpi_subfind_info.c
+sub_particle_list.c
+create_plists.c
+disk_orient.c
+extrap.c
+center_of_mass.c
+cosang_data_setup.c
+extrap_restart.c
+gal_lock.c  For creating fictitious particle.  Not in use anymore.
+particle_damping.c Damping a fictitious particle. Not in use anymore.
+restart_cosang.c
+timer.c profiler functions
+
+Luke's permutation code:
+
+load.c
+load.h
+utils.c
+utils.h
+permute.c
+permute.h

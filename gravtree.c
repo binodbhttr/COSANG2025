@@ -721,7 +721,17 @@ void gravity_tree(void)
 	      while(no >= 0)
 		{
 		  if(Nodes[no].u.d.mass > 0)
-		    P[i].GravCost[TakeLevel] += Nodes[no].GravCost * P[i].Mass / Nodes[no].u.d.mass;
+		    {
+		      /* FIX (Binod B, 2026):
+		       * Use fabs(P[i].Mass) to ensure computational GravCost is strictly positive.
+		       * In CoSANG, tidal stripping or galaxy mass adjustment can reduce P[i].Mass
+		       * below zero. Because GravCost is purely an internal CPU workload metric used
+		       * for MPI domain decomposition (and NOT physical force evaluation), taking the
+		       * absolute mass accurately reflects positive CPU time spent computing gravity
+		       * for particle i, preventing negative workloads in domain.c without modifying
+		       * physical forces or particle masses. */
+		      P[i].GravCost[TakeLevel] += Nodes[no].GravCost * fabs(P[i].Mass) / Nodes[no].u.d.mass;
+		    }
 
 		  no = Nodes[no].u.d.father;
 		}

@@ -5,11 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-
 #include "allvars.h"
 #include "proto.h"
 
+int haloNtrees = 0;
+int Ntothalos = 0;
 
 void read_trees(int totmal)
 {
@@ -144,8 +144,6 @@ void read_haloheader(int fnr)
 void read_halotree(int fnr)
 {
 
-    int haloNtrees;
-    int Ntothalos;
     int *tree;
     char file1[1000];
     FILE *ht;
@@ -198,6 +196,14 @@ long long Find_mostbound(int haloindex, int treeindex)
       
     addhalos = 0;
     
+    if(treeindex < 0 || treeindex >= haloNtrees)
+    {
+        printf("[DIAGNOSTIC OUT-OF-BOUNDS] Task %d: INVALID treeindex=%d (haloNtrees in current tree file is %d), haloindex=%d\n",
+               ThisTask, treeindex, haloNtrees, haloindex);
+        fflush(stdout);
+        return 0;
+    }
+
     numthalos = hptree[treeindex].halospertree;
     
     for(i=0; i<treeindex+1; i++)
@@ -207,6 +213,14 @@ long long Find_mostbound(int haloindex, int treeindex)
     }
 
     Shalo = addhalos - numthalos + haloindex;
+
+    if(Shalo < 0 || Shalo >= Ntothalos)
+    {
+        printf("[DIAGNOSTIC OUT-OF-BOUNDS] Task %d: INVALID Shalo=%d (Ntothalos in current tree file is %d), haloindex=%d, treeindex=%d\n",
+               ThisTask, Shalo, Ntothalos, haloindex, treeindex);
+        fflush(stdout);
+        return 0;
+    }
 
     mboundID = halo_tree[Shalo].MostBoundID;
 
@@ -225,19 +239,18 @@ int Find_subhidx(int haloindex, int treeindex)
       
     addhalos = 0;
     
+    if(treeindex < 0 || treeindex >= haloNtrees) return 0;
     numthalos = hptree[treeindex].halospertree;
     
     for(i=0; i<treeindex+1; i++)
     {
         addhalos = hptree[i].halospertree + addhalos;
-        
     }
 
     Shalo = addhalos - numthalos + haloindex;
+    if(Shalo < 0 || Shalo >= Ntothalos) return 0;
 
     subhaloindex = halo_tree[Shalo].SubhaloIndex;
-
-    //printf("Halo Read:  haloidx = %d, treeidx = %d, addhalo = %d, numthalos = %d, Shalo = %d, subhaloidx = %d\n", haloindex, treeindex, addhalos, numthalos, Shalo, subhaloindex);
 
     return subhaloindex;
 
@@ -254,20 +267,20 @@ int Find_subfnr(int haloindex, int treeindex)
       
     addhalos = 0;
     
+    if(treeindex < 0 || treeindex >= haloNtrees) return 0;
     numthalos = hptree[treeindex].halospertree;
     
     for(i=0; i<treeindex+1; i++)
     {
         addhalos = hptree[i].halospertree + addhalos;
-        
     }
 
     Shalo = addhalos - numthalos + haloindex;  
+    if(Shalo < 0 || Shalo >= Ntothalos) return 0;
 
     subf_fnr = halo_tree[Shalo].FileNr;
 
     return subf_fnr;
-
 }
 
 int Find_MIdx(int haloindex, int treeindex)
@@ -280,15 +293,16 @@ int Find_MIdx(int haloindex, int treeindex)
 
     addhalos = 0;
 
+    if(treeindex < 0 || treeindex >= haloNtrees) return 0;
     numthalos = hptree[treeindex].halospertree;
 
     for(i=0; i<treeindex+1; i++)
     {
         addhalos = hptree[i].halospertree + addhalos;
-
     }
 
     Shalo = addhalos - numthalos + haloindex;
+    if(Shalo < 0 || Shalo >= Ntothalos) return 0;
 
     MIdx = halo_tree[Shalo].SubhaloIndex;
 

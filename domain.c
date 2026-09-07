@@ -2082,6 +2082,14 @@ void domain_assign_load_or_work_balanced(int mode, int multipledomains)
 		{
 		  queues[q].next[target] = queues[q].first;
 		  queues[q].previous[queues[q].first] = target;
+		  /* FIX (BinodB, 2026):
+		   * Explicitly set the predecessor of the new head element to -1.
+		   * In original Gadget-3, queues[q].previous[target] was omitted here,
+		   * leaving a stale pointer from target's prior position. If target's
+		   * workload was smaller than all other tasks (e.g. from negative/low costs),
+		   * prepending target to the head created a closed circular linked list,
+		   * causing while(value < queues[q].value[ta]) to spin in an infinite loop. */
+		  queues[q].previous[target] = -1;
 		  queues[q].first = target;
 		}
 	      else

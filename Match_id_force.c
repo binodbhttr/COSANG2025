@@ -159,7 +159,8 @@ void Match_ids()
         {
            if((gidx = hash_lookup(hash3, P[partidx].ID)) != HASH_INVALID)
            {
-              /* PREVIOUS CODE: if(AllGal[gidx].sub_len >= 1000) - Missing array bounds validation */
+               /* FIX (BinodB, 2026):
+               /* PREVIOUS FIX: if(AllGal[gidx].sub_len >= 1000) - Missing array bounds validation */
               /* ADDED FIX: Bounds check to prevent out-of-bounds access to AllGal[gidx] if hash returns stray index */
               if(gidx >= 0 && gidx < NumGalaxies)
               {

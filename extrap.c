@@ -428,9 +428,9 @@ void calc_J_slopes(int newgal, int oldgal)
 
 void cal_new_galparams()
 {
-  int i;
-  float cg, sm, bm, bhm, dsr, J1, J2, J3, Vel1, Vel2, Vel3;
-
+  int i,bmtm_count;
+  float cg, sm, bm, bhm, dsr, J1, J2, J3, Vel1, Vel2, Vel3, Mbaryon, Mtot, f;
+  bmtm_count=0;
  // printf("cal_new_galparams\n");
   for(i=0; i<NumGalaxies; i++)
   {
@@ -446,7 +446,20 @@ void cal_new_galparams()
     Vel1 = (All.Time * AllGal[i].Velslope[0]) + AllGal[i].Velb[0];
     Vel2 = (All.Time * AllGal[i].Velslope[1]) + AllGal[i].Velb[1];
     Vel3 = (All.Time * AllGal[i].Velslope[2]) + AllGal[i].Velb[2];
-   
+
+    //Jeremy's suggestion September 09 2026
+    Mbaryon=cg+sm+bm+bhm;
+    Mtot=AllGal[i].Mvir;
+    f=Mtot/Mbaryon;
+    if(Mbaryon>Mtot)
+        {
+        bmtm_count=bmtm_count+1;
+        cg=f*cg;
+        sm=f*sm;
+        bm=f*bm;
+        bhm*f*bhm;
+        }
+  
     /*if(ThisTask == 0)
     {
        printf("coldslope = %f, coldb = %f, scaleslope = %f, scaleb = %f, stellarslope = %f, stellarb = %f\n", AllGal[i].coldslope, AllGal[i].coldb, AllGal[i].scaleslope, AllGal[i].scaleb, AllGal[i].stellarslope, AllGal[i].stellarb);
@@ -488,6 +501,7 @@ void cal_new_galparams()
 
   }
 
-
+  printf("DEBUG:Number of times Baryon Mass was Greater than Total Mass = %d",bmtm_count);
+  
   return;
 }

@@ -457,7 +457,7 @@ void cal_new_galparams()
         cg=f*cg;
         sm=f*sm;
         bm=f*bm;
-        bhm*f*bhm;
+        bhm=f*bhm;
         }
   
     /*if(ThisTask == 0)

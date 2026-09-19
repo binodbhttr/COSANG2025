@@ -11,8 +11,6 @@
 #define MYSORT 
 #define DOUBLEPRECISION 
 #define DOUBLEPRECISION_FFTW 
-#define tree_sage_run 
-#define THIS_IS_A_COSANG_RUN 
 #define Extrap 
 #define Mass_Adjust 
 #define Disk_Orientation 

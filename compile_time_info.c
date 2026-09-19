@@ -15,8 +15,6 @@ printf(
 "        MYSORT\n"
 "        DOUBLEPRECISION\n"
 "        DOUBLEPRECISION_FFTW\n"
-"        tree_sage_run\n"
-"        THIS_IS_A_COSANG_RUN\n"
 "        Extrap\n"
 "        Mass_Adjust\n"
 "        Disk_Orientation\n"

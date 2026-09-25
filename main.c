@@ -162,9 +162,11 @@ int main(int argc, char **argv)
     RestartSnapNum = -1;
 #endif
 
-
- printf("sageFlag = %d\n", sageFlag);
-/*#else
+if(ThisTask == 0) /*Added by BinodB to print this just once when sim starts*/
+  {
+    printf("sageFlag = %d\n", sageFlag);
+  }
+    /*#else
   
   if(argc >= 4)
     RestartFlag = atoi(argv[3]);
@@ -187,8 +189,10 @@ int main(int argc, char **argv)
 #ifdef PAUSE_RUN_TO_ATTACH_DEBUGGER
   pause_run_to_attach_debugger();
 #endif
-  printf("Restartflag = %d\n", RestartFlag);
-
+  if(ThisTask == 0) /* Added by BinodB to print this just once */
+  {
+    printf("Restartflag = %d\n", RestartFlag);
+  }
 #ifdef tree_sage_run
   if(ThisTask ==0)
   {

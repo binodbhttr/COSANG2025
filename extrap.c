@@ -450,8 +450,8 @@ void cal_new_galparams()
     //Jeremy's suggestion September 09 2026
     Mbaryon=cg+sm+bm+bhm;
     Mtot=AllGal[i].Mvir;
-    f=Mtot/Mbaryon;
-    if(Mbaryon>Mtot)
+    f=1.01*(Mtot/Mbaryon);
+    if(f<1)
         {
         bmtm_count=bmtm_count+1;
         cg=f*cg;
@@ -501,7 +501,10 @@ void cal_new_galparams()
 
   }
 
-  printf("DEBUG:Number of times Baryon Mass was Greater than Total Mass = %d",bmtm_count);
-  
+  if(ThisTask == 0 && bmtm_count > 0)
+    {
+      printf("\nDEBUG: [Time %g] Number of times Baryon Mass was Greater than Total Mass = %d\n",All.Time, bmtm_count);
+      fflush(stdout);
+    }
   return;
 }

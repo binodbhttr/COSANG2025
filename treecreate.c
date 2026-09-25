@@ -445,7 +445,7 @@ void generate_trees(void)
       {
 	/* ============================================================================
 	   [GAP ROOT SAFETY CHECK]
-	   Added on July 12, 2026, 21:47:12-07:00.
+	   Added on July 12, 2026, 21:47:12-07:00 by BinodB
 	   
 	   Do not select unpopulated gap subhalos (FirstHaloInFOFgroup < 0) 
 	   as tree roots, to prevent SAGE from constructing empty trees.
@@ -482,13 +482,15 @@ void generate_trees(void)
   sprintf(buf, "%s/treedata", All.OutputDir);
   mkdir(buf, 02755);
 
-
+  printf("Writing %d tree files for snapshot %03d...\n", FilesPerSnapshot, LastSnapShotNr); //added by BinodB
+  fflush(stdout);
+  
   for(filenr = 0; filenr < FilesPerSnapshot; filenr++)
     {
       sprintf(buf, "%s/treedata/trees_%03d.%d", All.OutputDir, LastSnapShotNr, filenr);
 
-      printf("starting: %s\n", buf);
-      fflush(stdout);
+      /*printf("starting: %s\n", buf); //Removed by BinodB
+        fflush(stdout); */
 
       if(!(fd = fopen(buf, "w")))
 	{
@@ -511,7 +513,7 @@ void generate_trees(void)
 	{
 	  /* ============================================================================
 	     [GAP ROOT SAFETY CHECK]
-	     Added on July 12, 2026, 21:47:12-07:00.
+	     Added on July 12, 2026, 21:47:12-07:00 by BinodB
 	     
 	     Do not select unpopulated gap subhalos (FirstHaloInFOFgroup < 0) 
 	     as tree roots, to prevent SAGE from constructing empty trees.

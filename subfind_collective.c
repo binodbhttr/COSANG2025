@@ -1317,11 +1317,11 @@ void subfind_col_find_candidates(int totgrouplen)
 
       MPI_Barrier(MPI_COMM_WORLD);
       tt1 = second();
-      if(ThisTask == 0)
+    /* if(ThisTask == 0) // Removed by BinodB Line 1328 gives the cumulative time
 	{
 	  printf("  ma=%d/%d took %g sec\n", master, NTask, timediff(tt0, tt1));
 	  fflush(stdout);
-	}
+	} */
     }
   t1 = second();
   if(ThisTask == 0)

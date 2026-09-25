@@ -56,9 +56,11 @@ void run(void)
       create_snapshot_if_desired();
 
       write_cpu_log();		/* output some CPU usage log-info (accounts for everything needed up to the current sync-point) */
-     
-      printf("Ti_current = %d, TIMEBASE = %d\n", All.Ti_Current, TIMEBASE);
-
+       
+	  if(ThisTask == 0) /*Added by BinodB to reduce the output file. Without this it printed number of ranks times sync points lines to output file*/
+	  	{
+	  		printf("Ti_current = %d, TIMEBASE = %d\n", All.Ti_Current, TIMEBASE);
+		}	
 //      if(All.Ti_Current >= TIMEBASE)	/* check whether we reached the final time */
         if(All.Time >= All.TimeMax || All.Ti_Current >= TIMEBASE)
 	{

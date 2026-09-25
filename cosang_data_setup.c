@@ -223,8 +223,10 @@ void sage_setup(){
 
     MPI_Bcast(&NumGalaxies, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-    printf("NumGalaxies = %d\n", NumGalaxies);
-
+    if(ThisTask == 0) //added by BinodB to reduce the number of times print statement is sent to log file
+      {
+         printf("NumGalaxies = %d\n", NumGalaxies);
+      }
     if(ThisTask != 0)
     {
        malallgal(NumGalaxies);

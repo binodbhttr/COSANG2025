@@ -429,7 +429,7 @@ void calc_J_slopes(int newgal, int oldgal)
 void cal_new_galparams()
 {
   int i,bmtm_count;
-  float cg, sm, bm, bhm, dsr, J1, J2, J3, Vel1, Vel2, Vel3, Mbaryon, Mtot, f;
+  float cg, sm, bm, bhm, dsr, J1, J2, J3, Vel1, Vel2, Vel3, Mbaryon, Mtot, f, f_thres;
   bmtm_count=0;
  // printf("cal_new_galparams\n");
   for(i=0; i<NumGalaxies; i++)
@@ -450,14 +450,16 @@ void cal_new_galparams()
     //Jeremy's suggestion September 09 2026
     Mbaryon=cg+sm+bm+bhm;
     Mtot=AllGal[i].Mvir;
-    f=1.01*(Mtot/Mbaryon);
-    if(f<1)
+    f=(Mbaryon/Mtot);
+    f_thres=1e-3; //Should be 1 or 1.01 for realistic case but we are testing it. 
+
+    if(f>f_thres)
         {
         bmtm_count=bmtm_count+1;
-        cg=f*cg;
-        sm=f*sm;
-        bm=f*bm;
-        bhm=f*bhm;
+        cg=f_thres*cg;
+        sm=f_thres*sm;
+        bm=f_thres*bm;
+        bhm=f_thres*bhm;
         }
   
     /*if(ThisTask == 0)
